@@ -15,4 +15,9 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
 		name: i18n(I18nKey.archive),
 		url: "/archive/",
 	},
+	[LinkPreset.Projects]: {  // Added this entire block for Projects page
+        name: i18n(I18nKey.projects),
+        url: '/projects',
+        external: false,
+    },
 };
