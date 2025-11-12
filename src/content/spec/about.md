@@ -5,7 +5,7 @@ My work centers around building secure, privacy-first systems for real-world app
 
 I find the most enjoyment working with others! As niche as it is, teamwork really does make the dream work when it comes to academia and the professional life. 
 
-In my free time, I like to study Korean (I actually studied abroad, you can read more about that [here!](https://www.linkedin.com/posts/dsuyu_korea2025-activity-7348057640855400452-Ga50?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD3EH-wBMf_Db8oezWHhZhrfPkUKlLF9vhI)), spend time at the park, and listen to music. 
+In my free time, I like to study Korean (I actually studied abroad, you can read more about that [here!](https://www.linkedin.com/posts/dsuyu_korea2025-activity-7348057640855400452-Ga50?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD3EH-wBMf_Db8oezWHhZhrfPkUKlLF9vhI)), spend time at the park, and listen to music. I'm a native Spanish and English speaker, so becoming fluent in Korean would make me trilingual! 
 
 I'm always open to new opportunities, collaborations, and conversations! Whether you have a project idea or just want to chat about anything, feel free to reach out through [LinkedIn](https://www.linkedin.com/in/dsuyu) or check out my work on [GitHub](https://github.com/dsuyu1).
 
