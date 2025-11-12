@@ -1,11 +1,11 @@
 ---
-title: Welcome to My Blog!
+title: Welcome to My Blog! 👋
 published: 2025-11-11T00:00:00-06:00 
 category: Miscellaneous
 draft: true
 ---
 
-# Hello everybody! 👋
+# Hello everybody!
 My name is Damian Villarreal! I've made this blog to document my past, current, and future endeavors in the computer science and cybersecurity world. 
 
 My main objectives with this blog are:

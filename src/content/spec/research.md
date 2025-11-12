@@ -7,7 +7,7 @@ Detailed write-ups and formal publications in progress.
 :::
 
 ---
-## Current Work
+## 📃 Current Work
 
 ### Zero-Trust Edge Camera for Privacy Preserving Surveillance
 
@@ -20,11 +20,11 @@ As the number of Internet of Things (IoT) devices keeps growing, security is bec
 :::
 
 ---
-## Conference Presentations
+## 👥 Conference Presentations
 
 ### Zero-Trust at the Edge: Privacy-First Security for IoT Surveillance
 **Region One ESC Cybersecurity Summit** • Edinburg, TX • Oct 30, 2025  
-📊 [View Slides](https://www.canva.com/design/DAG3MFzARPc/LbZn3UGeutN40iEOIY64Lg/edit?utm_content=DAG3MFzARPc&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+[View Slides](https://www.canva.com/design/DAG3MFzARPc/LbZn3UGeutN40iEOIY64Lg/edit?utm_content=DAG3MFzARPc&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 :::note[SUMMARY]
 Presented a security-focused approach to IoT surveillance that addresses the vulnerabilities of traditional perimeter-based security models. The talk covered how blockchain-backed zero-trust architecture combined with edge computing can protect sensitive video data throughout its entire lifecycle—even in distributed, cloud-based environments where defining security perimeters is impractical. Demonstrated real-time privacy preservation techniques and explained how our framework ensures data protection despite potential system compromise.

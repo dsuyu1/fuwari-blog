@@ -7,17 +7,17 @@ Full project write-ups and detailed documentation are being added progressively.
 :::
 
 ---
-## Featured
+## ⭐ Featured 
 > My proudest and most complete works!
 ::github{repo="dsuyu1/SOAR-EDR-Project"}
 
 ---
-## Works in Progress
+## 🚧 Works-in-Progress 
 > All the projects I am currently working on.
 ::github{repo="dsuyu1/workflows-and-agents-with-langgraph"}
 
 ---
-## Completed
+## ✔️ Completed 
 > A collection of all my completed projects.
 
 ::github{repo="dsuyu1/anomaly-detection-fl"}

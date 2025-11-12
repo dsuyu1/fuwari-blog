@@ -17,9 +17,13 @@ I'm always open to new opportunities, collaborations, and conversations! Whether
 ![Studying abroad in Korea](src/assets/images/abroad.JPG)
 <small> Studying abroad in South Korea. </small>
 
-</div>
+
 
 ---
 
 <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/1U3yisApdYy1BjiOAl0QBb?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+<small>Take a listen to the music I like!</small>
+
+</div>
 
