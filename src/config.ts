@@ -44,6 +44,7 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.Home,
 		LinkPreset.Archive,
 		LinkPreset.Projects, // using the preset now so we can support multiple languages
+		LinkPreset.Research, // added to have Research tab now
 		LinkPreset.About,
 
 		{

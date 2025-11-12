@@ -1,12 +1,25 @@
 # About
-I'm an undergraduate student researcher at the University of Texas Rio Grande Valley. I have a passion for agentic AI and cybersecurity.
+I'm an undergraduate Computer Science student at the University of Texas Rio Grande Valley, graduating in Spring 2026. Currently, I work as a Student Analyst at the Regional Security Operations Center (RSOC) and conduct research in various topics.
 
+My work centers around building secure, privacy-first systems for real-world applications. I'm particularly passionate about crytography, security automation, and exploring how emerging technologies like blockchain can solve current and future security challenges.
 
-<!-- ## My Latest Work
-::github{repo="dsuyu1/anomaly-detection-fl"} -->
+I find the most enjoyment working with others! As niche as it is, teamwork really does make the dream work when it comes to academia and the professional life. 
 
+In my free time, I like to study Korean (I actually studied abroad, you can read more about that [here!](https://www.linkedin.com/posts/dsuyu_korea2025-activity-7348057640855400452-Ga50?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD3EH-wBMf_Db8oezWHhZhrfPkUKlLF9vhI)), spend time at the park, and listen to music. 
 
-<!-- > ### Sources of images used in this site
-> - [Unsplash](https://unsplash.com/)
-> - [星と少女](https://www.pixiv.net/artworks/108916539) by [Stella](https://www.pixiv.net/users/93273965)
-> - [Rabbit - v1.4 Showcase](https://civitai.com/posts/586908) by [Rabbit_YourMajesty](https://civitai.com/user/Rabbit_YourMajesty) -->
+I'm always open to new opportunities, collaborations, and conversations! Whether you have a project idea or just want to chat about anything, feel free to reach out through [LinkedIn](https://www.linkedin.com/in/dsuyu) or check out my work on [GitHub](https://github.com/dsuyu1).
+
+<div align="center">
+
+![Me with the RSOC](src/assets/images/RSOC.jpg)
+<small> Friendsgiving at the Regional Security Operations Center. </small>
+
+![Studying abroad in Korea](src/assets/images/abroad.JPG)
+<small> Studying abroad in South Korea. </small>
+
+</div>
+
+---
+
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/1U3yisApdYy1BjiOAl0QBb?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
