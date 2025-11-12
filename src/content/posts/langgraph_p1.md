@@ -1,14 +1,13 @@
 ---
-title: Workflows & Agents with LangGraph: Part 1
-published: 2025-11-11T00:00:00-06:00 
-tags: [LangGraph]
-category: Agentic AI
+title: "LangGraph Series Part 1: Building Intelligent Workflows"
+published: 2025-11-11T00:00:00-08:00
+tags: [LangChain, LangGraph, AI Agents, Workflows, Python]
+category: AI
 draft: true
 ---
 
-# Welcome to the LangGraph & LangChain Project Series  
-
-## 📖 Introduction
+# Welcome to the LangGraph & LangChain Project Series! 
+## Introduction
 As employees in the 21st century, we face an inevitable reality: artificial intelligence is transforming the workplace faster than ever before. I don’t believe it’s a matter of if our jobs will be affected — it’s a matter of when. In China, AI-powered robots now assemble cars in “dark factories,” where production continues around the clock without the need for human supervision — or even lights. Intelligent AI agents aren’t just coming; they’re already here.
 
 As a cybersecurity analyst, I recognize that my field is no exception. Many of the tasks we perform today can and likely will be automated by intelligent agents. That’s why I believe it’s essential for professionals like us to understand how these systems work — not to fear them, but to learn how to design, maintain, and secure them. If we want to stay relevant in the era of autonomous agents, we need to be the ones building and managing them.
@@ -17,7 +16,7 @@ This project marks my first step in that direction. Through a series of experime
 
 A special thanks to [Mr. Hacker Loi](https://youtu.be/rfPsjqNbWyA?si=iMXEsQFLkX4wr_v4).
 
-## 🔍 Overview
+## Overview
 According to [LangChain's official documentation](https://docs.langchain.com/oss/python/langgraph/workflows-agents):
 
 > **Workflows** have predetermined code paths and are designed to operate in a certain order.
@@ -27,23 +26,27 @@ This repository is part of my ongoing series of projects designed to build **fam
 
 Each part of this series focuses on a specific aspect of intelligent agent design, starting from static, rule-based workflows and progressing toward dynamic, autonomous AI agents.
 
-## 🎯 Goals
+## Goals
 
 - Understand how **LangGraph** structures logic using **states**, **nodes**, and **edges**  
 - Learn to design **workflows** that control and monitor AI behavior predictably  
 - Gain practical experience integrating **LLMs**, **retrieval tools**, and **self-evaluation loops**  
 - Transition from **workflows** → **multi-agent systems** capable of decision-making and collaboration  
 
-# Part 1: Introduction to Workflows with LangGraph
+---
+
+# Introduction to Workflows with LangGraph
 <div align="center">
 
-  ![workflow](src/assets/images/langgraph/agenticworkflow.png)
+![workflow](src/assets/images/langgraph/agenticworkflow.png)
 
-  ###### In this project, I build a workflow using LangGraph. I will use [this](https://youtu.be/mRx12jkugTE?si=48OSoke3ebptm8gn) tutorial from Venelin Valkov as   a guide. However, my implementation is unique and is working as of today's date (11/1/2025). You can read the full documentation of the tutorial [here]          (https://www.mlexpert.io/academy/v1/ai-agents/langgraph-getting-started). 
+<small>
+
+In this project, I build a workflow using LangGraph. I will use [this](https://youtu.be/mRx12jkugTE?si=48OSoke3ebptm8gn) tutorial from Venelin Valkov as   a guide. However, my implementation is unique and is working as of today's date (11/1/2025). You can read the full documentation of the tutorial [here](https://www.mlexpert.io/academy/v1/ai-agents/langgraph-getting-started). 
+
+</small>
 
 </div>
-
-## Introduction
 
 According to [LangChain's official documentation](https://docs.langchain.com/oss/python/langgraph/workflows-agents):
 
@@ -115,7 +118,7 @@ For example, we can have a function that freezes the graph and waits for human r
 
 Human-in-the-loop takes a cool AI demo app to something you can actually use in production. With humans "in the loop," we can relax knowing that AI won't go crazy. :relieved:
 
-## Part 1: Workflow
+## Workflows
 
 We start by importing everything we need. Most of them come from LangChain. The LangGraph imports will help us build our state graphs.
 
@@ -357,8 +360,11 @@ app = graph.compile()
 ```python
 display(Image(app.get_graph().draw_mermaid_png()))
 ```
+<div align="center">
 
-<img src="graph2.png" alt="nodes" width="300"/>
+![Graph](src/assets/images/langgraph/graph2.png)
+
+</div>
 
 ### Running the workflow
 
@@ -402,7 +408,14 @@ The response from the model was:
 
 There are some issues I want to address, especially regarding the response from the model, but for now, let's call it a win and move on! ⭐
 
-## Conclusion and Next Steps
-This concludes Part 1: Workflows, and the end of my introduction to LangChain. In this project, I implemented an intelligent IT support ticket system using LangGraph’s workflow architecture. The system classifies support tickets, retrieves relevant knowledge base entries, drafts responses, and self-evaluates its output until it meets quality standards. Through this process, I learned how LangGraph’s core components—**state**, **nodes**, and **edges**—enable structured and predictable orchestration of AI tasks. This workflow-based design serves as a foundation for my next step: building the same system using **AI agents** to explore dynamic, decision-making behavior.
+---
 
-You can see all the code for this section [here](workflow_part1.ipynb).
+## Conclusion and Next Steps
+
+In this first part, I built a deterministic workflow for IT ticket triage using LangGraph. The key insight? **Workflows give you control**. Every step is predictable, debuggable, and reliable—exactly what you want for production systems.
+
+But workflows have limitations. What if we need adaptability? What if the LLM should *decide* its own strategy? That's where **AI agents** come in.
+
+In **Part 2**, I'll rebuild this same system as an autonomous agent using the ReAct pattern, exploring how dynamic decision-making changes everything.
+
+[View the complete code on GitHub.](https://github.com/dsuyu1/workflows-and-agents-with-langgraph/blob/10494491d520988353d32089dbc28a5e50f82e5b/Part%201%3A%20Workflows/workflow_part1.ipynb)

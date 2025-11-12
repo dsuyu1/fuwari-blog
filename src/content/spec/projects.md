@@ -7,11 +7,11 @@ Full project write-ups and detailed documentation are being added progressively.
 :::
 
 ---
-## ⭐ Featured 
+<!-- ## ⭐ Featured 
 > My proudest and most complete works!
-::github{repo="dsuyu1/SOAR-EDR-Project"}
 
----
+
+--- -->
 ## 🚧 Works-in-Progress 
 > All the projects I am currently working on.
 ::github{repo="dsuyu1/workflows-and-agents-with-langgraph"}
@@ -24,6 +24,7 @@ Full project write-ups and detailed documentation are being added progressively.
 ::github{repo="dsuyu1/espresso-data-mining"}
 ::github{repo="dsuyu1/token-optimization"}
 ::github{repo="dsuyu1/intro-to-maldev"}
+::github{repo="dsuyu1/SOAR-EDR-Project"}
 
 ---
 *More projects coming soon...*
