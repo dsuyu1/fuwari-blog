@@ -1,0 +1,279 @@
+---
+import { siteConfig } from "../config";
+
+const banner = siteConfig.banner;
+const images = Array.isArray(banner.src) ? banner.src : [banner.src];
+const position = banner.position || "center";
+const autoRotate = banner.autoRotate ?? true;
+const interval = banner.interval ?? 5000;
+---
+
+{banner.enable && (
+	<div class="banner-carousel">
+		<div class="banner-container">
+			{images.map((img, index) => (
+				<img 
+					src={img.startsWith('/') ? img : `/${img}`}
+					alt={`Banner ${index + 1}`}
+					class:list={['banner-image', { active: index === 0 }]}
+					style={`object-position: ${position}`}
+					loading={index === 0 ? 'eager' : 'lazy'}
+				/>
+			))}
+			
+			<div class="banner-fade-overlay"></div>
+			
+			{images.length > 1 && (
+				<>
+					<button class="banner-nav prev" aria-label="Previous image">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+							<polyline points="15 18 9 12 15 6"></polyline>
+						</svg>
+					</button>
+					<button class="banner-nav next" aria-label="Next image">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+							<polyline points="9 18 15 12 9 6"></polyline>
+						</svg>
+					</button>
+				</>
+			)}
+		</div>
+		
+		{banner.credit.enable && (
+			<div class="banner-credit">
+				{banner.credit.url ? (
+					<a href={banner.credit.url} target="_blank" rel="noopener noreferrer">
+						{banner.credit.text}
+					</a>
+				) : (
+					<span>{banner.credit.text}</span>
+				)}
+			</div>
+		)}
+	</div>
+)}
+
+<script define:vars={{ autoRotate, interval }}>
+	const images = document.querySelectorAll('.banner-image');
+	const prevBtn = document.querySelector('.banner-nav.prev');
+	const nextBtn = document.querySelector('.banner-nav.next');
+	
+	let currentIndex = 0;
+	let autoRotateInterval;
+
+	function showImage(index) {
+		images.forEach((img, i) => {
+			img.classList.toggle('active', i === index);
+		});
+		currentIndex = index;
+	}
+
+	function nextImage() {
+		showImage((currentIndex + 1) % images.length);
+	}
+
+	function prevImage() {
+		showImage((currentIndex - 1 + images.length) % images.length);
+	}
+
+	function startAutoRotate() {
+		if (autoRotate && images.length > 1) {
+			autoRotateInterval = setInterval(nextImage, interval);
+		}
+	}
+
+	function stopAutoRotate() {
+		if (autoRotateInterval) {
+			clearInterval(autoRotateInterval);
+		}
+	}
+
+	function resetAutoRotate() {
+		stopAutoRotate();
+		startAutoRotate();
+	}
+
+	// Navigation buttons
+	if (nextBtn) {
+		nextBtn.addEventListener('click', () => {
+			nextImage();
+			resetAutoRotate();
+		});
+	}
+
+	if (prevBtn) {
+		prevBtn.addEventListener('click', () => {
+			prevImage();
+			resetAutoRotate();
+		});
+	}
+
+	// Keyboard navigation
+	document.addEventListener('keydown', (e) => {
+		if (images.length <= 1) return;
+		
+		if (e.key === 'ArrowLeft') {
+			prevImage();
+			resetAutoRotate();
+		} else if (e.key === 'ArrowRight') {
+			nextImage();
+			resetAutoRotate();
+		}
+	});
+
+	// Pause on hover
+	const container = document.querySelector('.banner-container');
+	if (container) {
+		container.addEventListener('mouseenter', stopAutoRotate);
+		container.addEventListener('mouseleave', startAutoRotate);
+	}
+
+	// Start auto-rotation
+	startAutoRotate();
+</script>
+
+<style>
+.banner-carousel {
+	position: relative;
+	width: 100%;
+	margin-bottom: 0;
+	overflow: hidden;
+}
+
+.banner-container {
+	position: relative;
+	width: 100%;
+	height: 1000px;
+	overflow: hidden;
+	border-radius: 0.5rem;
+}
+
+.banner-image {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center center;
+	opacity: 0;
+	transition: opacity 0.6s ease-in-out;
+	transform: scale(1);
+	transform-origin: center center;
+}
+
+.banner-image.active {
+	opacity: 1;
+}
+
+/* Fade overlay at bottom - more visible */
+.banner-fade-overlay {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 250px;
+	background: linear-gradient(
+		to bottom,
+		transparent 0%,
+		rgba(0, 0, 0, 0.5) 70%,
+		rgba(0, 0, 0, 0.8) 100%
+	);
+	z-index: 5;
+	pointer-events: none;
+}
+
+/* Dark mode fade */
+:global(.dark) .banner-fade-overlay {
+	background: linear-gradient(
+		to bottom,
+		transparent 0%,
+		rgba(0, 0, 0, 0.6) 70%,
+		rgba(0, 0, 0, 0.9) 100%
+	);
+}
+
+/* Stylish arrow navigation - centered vertically */
+.banner-nav {
+	position: absolute;
+	top: 50%; /* Center of container */
+	transform: translateY(-50%);
+	background: rgba(255, 255, 255, 0.15);
+	backdrop-filter: blur(12px);
+	color: white;
+	border: 1px solid rgba(255, 255, 255, 0.25);
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease;
+	z-index: 10;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.banner-nav:hover {
+	background: rgba(255, 255, 255, 0.25);
+	border-color: rgba(255, 255, 255, 0.4);
+	transform: translateY(-50%) scale(1.1);
+	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.banner-nav:active {
+	transform: translateY(-50%) scale(0.95);
+}
+
+.banner-nav svg {
+	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.banner-nav.prev {
+	left: 2rem;
+}
+
+.banner-nav.next {
+	right: 2rem;
+}
+
+.banner-credit {
+	margin-top: 0.5rem;
+	text-align: center;
+	font-size: 0.875rem;
+	opacity: 0.7;
+}
+
+.banner-credit a {
+	color: inherit;
+	text-decoration: underline;
+	transition: opacity 0.3s ease;
+}
+
+.banner-credit a:hover {
+	opacity: 1;
+}
+
+@media (max-width: 768px) {
+	.banner-container {
+		height: 250px;
+	}
+
+	.banner-nav {
+		width: 40px;
+		height: 40px;
+	}
+
+	.banner-nav.prev {
+		left: 1rem;
+	}
+
+	.banner-nav.next {
+		right: 1rem;
+	}
+
+	.banner-fade-overlay {
+		height: 150px;
+	}
+}
+</style>

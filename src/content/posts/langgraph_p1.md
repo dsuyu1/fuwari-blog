@@ -2,12 +2,11 @@
 title: "LangGraph Series Part 1: Building Intelligent Workflows"
 published: 2025-11-11T00:00:00-08:00
 tags: [LangChain, LangGraph, AI Agents, Workflows, Python]
-category: AI
-draft: true
+category: Artificial Intelligence
+draft: false
 ---
 
 # Welcome to the LangGraph & LangChain Project Series! 
-## Introduction
 As employees in the 21st century, we face an inevitable reality: artificial intelligence is transforming the workplace faster than ever before. I don’t believe it’s a matter of if our jobs will be affected — it’s a matter of when. In China, AI-powered robots now assemble cars in “dark factories,” where production continues around the clock without the need for human supervision — or even lights. Intelligent AI agents aren’t just coming; they’re already here.
 
 As a cybersecurity analyst, I recognize that my field is no exception. Many of the tasks we perform today can and likely will be automated by intelligent agents. That’s why I believe it’s essential for professionals like us to understand how these systems work — not to fear them, but to learn how to design, maintain, and secure them. If we want to stay relevant in the era of autonomous agents, we need to be the ones building and managing them.

@@ -22,8 +22,10 @@ export type SiteConfig = {
 	};
 	banner: {
 		enable: boolean;
-		src: string;
+		src: string | string[]; // allows simple image or array
 		position?: "top" | "center" | "bottom";
+		autoRotate?: boolean; // Optional auto-rotation
+		interval?: number; // Milliseconds between transitions
 		credit: {
 			enable: boolean;
 			text: string;

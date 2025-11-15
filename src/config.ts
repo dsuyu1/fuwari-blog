@@ -17,12 +17,26 @@ export const siteConfig: SiteConfig = {
 	},
 	banner: {
 		enable: true,
-		src: "assets/images/cat.jpg", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
-		position: "center", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
+		src: [
+			"src/assets/images/banner/5.JPEG",
+			"src/assets/images/banner/16.JPEG",
+			"src/assets/images/banner/16[1].JPEG",
+			"src/assets/images/banner/20.JPEG",
+			"src/assets/images/banner/21.JPEG",
+			"src/assets/images/banner/21[1].JPEG",
+			"src/assets/images/banner/25.JPEG",
+			"src/assets/images/banner/251.jpg",
+			"src/assets/images/banner/7(1).jpg",
+			"src/assets/images/banner/22.jpg",
+			"src/assets/images/banner/20(1).jpg",
+		],
+		position: "center",
+		autoRotate: true,
+		interval: 7000, 
 		credit: {
-			enable: true, // Display the credit text of the banner image
-			text: "Image credits", // Credit text to be displayed
-			url: "https://www.pixiv.net/en/artworks/137161856", // (Optional) URL link to the original artwork or artist's page
+			enable: false, // Display the credit text of the banner image
+			text: "Summer 2025, South Korea", // Credit text to be displayed
+			// url: "https://www.pixiv.net/en/artworks/137161856", // (Optional) URL link to the original artwork or artist's page
 		},
 	},
 	toc: {
