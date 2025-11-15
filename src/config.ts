@@ -1,3 +1,15 @@
+import banner5 from "./assets/banner/5.jpg";
+import banner7_1 from "./assets/banner/7(1).jpg";
+import banner16 from "./assets/banner/16.jpg";
+import banner16_1 from "./assets/banner/16[1].jpg";
+import banner20 from "./assets/banner/20.jpg";
+import banner20_1 from "./assets/banner/20(1).jpg";
+import banner21 from "./assets/banner/21.jpg";
+import banner21_1 from "./assets/banner/21[1].jpg";
+import banner22 from "./assets/banner/22.jpg";
+import banner25 from "./assets/banner/25.jpg";
+import banner251 from "./assets/banner/251.jpg";
+
 import type {
 	ExpressiveCodeConfig,
 	LicenseConfig,
@@ -18,21 +30,21 @@ export const siteConfig: SiteConfig = {
 	banner: {
 		enable: true,
 		src: [
-			"src/assets/images/banner/5.JPEG",
-			"src/assets/images/banner/16.JPEG",
-			"src/assets/images/banner/16[1].JPEG",
-			"src/assets/images/banner/20.JPEG",
-			"src/assets/images/banner/21.JPEG",
-			"src/assets/images/banner/21[1].JPEG",
-			"src/assets/images/banner/25.JPEG",
-			"src/assets/images/banner/251.jpg",
-			"src/assets/images/banner/7(1).jpg",
-			"src/assets/images/banner/22.jpg",
-			"src/assets/images/banner/20(1).jpg",
+			banner5.src,
+			banner16.src,
+			banner16_1.src,
+			banner20.src,
+			banner21.src,
+			banner21_1.src,
+			banner25.src,
+			banner251.src,
+			banner7_1.src,
+			banner22.src,
+			banner20_1.src,
 		],
 		position: "center",
 		autoRotate: true,
-		interval: 7000, 
+		interval: 6000,
 		credit: {
 			enable: false, // Display the credit text of the banner image
 			text: "Summer 2025, South Korea", // Credit text to be displayed

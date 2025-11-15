@@ -6,14 +6,30 @@ const images = Array.isArray(banner.src) ? banner.src : [banner.src];
 const position = banner.position || "center";
 const autoRotate = banner.autoRotate ?? true;
 const interval = banner.interval ?? 5000;
+
+// Import images at build time
+const imageImports = await Promise.all(
+	images.map(async (img) => {
+		if (img.startsWith('/') || img.startsWith('http')) {
+			return img;
+		}
+		// For assets in src/assets, use dynamic import
+		try {
+			const imported = await import(`../assets/images/${img.replace('assets/images/', '')}`);
+			return imported.default.src;
+		} catch {
+			return img;
+		}
+	})
+);
 ---
 
 {banner.enable && (
 	<div class="banner-carousel">
 		<div class="banner-container">
-			{images.map((img, index) => (
+			{imageImports.map((img, index) => (
 				<img 
-					src={img.startsWith('/') ? img : `/${img}`}
+					src={img}
 					alt={`Banner ${index + 1}`}
 					class:list={['banner-image', { active: index === 0 }]}
 					style={`object-position: ${position}`}
