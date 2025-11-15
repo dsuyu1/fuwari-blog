@@ -43,7 +43,7 @@ export const siteConfig: SiteConfig = {
 			banner20_1.src,
 		],
 		position: "center",
-		autoRotate: true,
+		autoRotate: false,
 		interval: 6000,
 		credit: {
 			enable: false, // Display the credit text of the banner image

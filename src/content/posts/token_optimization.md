@@ -39,3 +39,8 @@ If you come from a programming background, the reason why machines tokenize thin
 Therefore, subword tokenization is the process of breaking these words up into smaller parts.
 
 A **vocabulary** is a list of these tokens. In the context of subword tokenization methods, like BPE, Word-Piece, and Unigram, vocabularies are built based on the frequencies of word fragments.  Rare words are highly fragmented [whereas the integrity of the most frequent words is preserved](https://aclanthology.org/2022.repl4nlp-1.10/) (Mofijul Islam et al., RepL4NLP 2022).
+
+## Why should I care?
+As LLMs are becoming a bigger and bigger part of our daily lives, the limits of what AI can generate is also being pushed higher and higher. The better we can create these tokenization algorithms, the better performance we can bring out of our LLMs.
+
+# The Problem
