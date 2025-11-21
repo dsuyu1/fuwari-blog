@@ -1,7 +1,7 @@
 ---
 title: "Hyperledger Fabric Series Part 1: Setting Up the Fabric"
 published: 2025-11-13T00:00:00-08:00
-tags: [Hyperledger Fabric, Blockchain]
+tags: [Hyperledger Fabric, Blockchain, Smart Contracts, Golang]
 category: Blockchain
 draft: true
 ---

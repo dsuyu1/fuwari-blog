@@ -1,7 +1,7 @@
 ---
-title: Greedy Approximation Algorithm for Optimal Vocabulary Construction in Subword Tokenization
+title: A Greedy Approach to Optimal Vocabulary Construction for Subword Tokenization
 published: 2025-11-12T00:00:00-06:00 
-tags: [NLP, LLMs, Research, Python]
+tags: [NLP, LLMs, Python]
 category: Artificial Intelligence
 draft: false
 ---
