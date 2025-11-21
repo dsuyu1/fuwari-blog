@@ -1,6 +1,7 @@
 ---
 title: "LangGraph Series Part 1: Building Intelligent Workflows"
 published: 2025-11-11T00:00:00-08:00
+description: I aim to build hands-on familiarity with LangGraph and LangChain, exploring how agentic systems can be designed, orchestrated, and applied to real-world problems.
 tags: [LangChain, LangGraph, AI Agents, Workflows, Python]
 category: Artificial Intelligence
 draft: false

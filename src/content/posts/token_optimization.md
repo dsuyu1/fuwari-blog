@@ -1,6 +1,7 @@
 ---
 title: A Greedy Approach to Optimal Vocabulary Construction for Subword Tokenization
 published: 2025-11-12T00:00:00-06:00 
+description: The goal is to build a vocabulary that minimizes the number of tokens needed to represent text while keeping the total vocabulary size limited to control memory and embedding size. 
 tags: [NLP, LLMs, Python]
 category: Artificial Intelligence
 draft: false
