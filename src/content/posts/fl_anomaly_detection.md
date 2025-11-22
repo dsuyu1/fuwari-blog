@@ -1,7 +1,6 @@
 ---
 title: "Analysis of Byzantine-Robust Aggregation Strategies in Federated Learning"
 published: 2025-11-20T00:00:00-08:00
-description: How do we deal with Byzantine attacks?
 tags: [Federated Learning, Cybersecurity, Python]
 category: Artificial Intelligence
 draft: false
