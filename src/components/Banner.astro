@@ -5,94 +5,248 @@ const banner = siteConfig.banner;
 const images = Array.isArray(banner.src) ? banner.src : [banner.src];
 const position = banner.position || "center";
 
-// Use only the first image for simplicity
-const firstImage = images[0];
-let imageImport = firstImage;
-
-if (!firstImage.startsWith('/') && !firstImage.startsWith('http')) {
-	try {
-		const imported = await import(`../assets/images/${firstImage.replace('assets/images/', '')}`);
-		imageImport = imported.default.src;
-	} catch {
-		imageImport = firstImage;
-	}
-}
+// Import all images
+const imageImports = await Promise.all(
+	images.map(async (img) => {
+		if (img.startsWith('/') || img.startsWith('http')) {
+			return img;
+		}
+		try {
+			const imported = await import(`../assets/images/${img.replace('assets/images/', '')}`);
+			return imported.default.src;
+		} catch {
+			return img;
+		}
+	})
+);
 ---
 
 {banner.enable && (
-	<div class="banner-wrapper">
-		<div class="banner-container">
-			<img
-				src={imageImport}
-				alt="Banner"
-				class="banner-image"
-				style={`object-position: ${position}`}
-				loading="eager"
-			/>
-			<div class="banner-fade-overlay"></div>
+	<div class="hero-banner">
+		<div class="hero-container">
+			{imageImports.map((img, index) => (
+				<div class:list={['hero-slide', { active: index === 0 }]}>
+					<img
+						src={img}
+						alt={`Photo ${index + 1}`}
+						class="hero-image"
+						style={`object-position: ${position}`}
+						loading={index === 0 ? 'eager' : 'lazy'}
+					/>
+				</div>
+			))}
+
+			<!-- Vignette overlay for depth -->
+			<div class="hero-vignette"></div>
+
+			<!-- Elegant dots navigation -->
+			{imageImports.length > 1 && (
+				<div class="hero-dots">
+					{imageImports.map((_, index) => (
+						<button
+							class:list={['hero-dot', { active: index === 0 }]}
+							data-index={index}
+							aria-label={`Go to photo ${index + 1}`}
+						></button>
+					))}
+				</div>
+			)}
 		</div>
 	</div>
 )}
 
 
+<script>
+	const slides = document.querySelectorAll('.hero-slide');
+	const dots = document.querySelectorAll('.hero-dot');
+	let currentIndex = 0;
+	let autoplayInterval;
+
+	function showSlide(index) {
+		slides.forEach((slide, i) => {
+			slide.classList.toggle('active', i === index);
+		});
+		dots.forEach((dot, i) => {
+			dot.classList.toggle('active', i === index);
+		});
+		currentIndex = index;
+	}
+
+	function nextSlide() {
+		const next = (currentIndex + 1) % slides.length;
+		showSlide(next);
+	}
+
+	function startAutoplay() {
+		if (slides.length > 1) {
+			autoplayInterval = setInterval(nextSlide, 5000);
+		}
+	}
+
+	function stopAutoplay() {
+		if (autoplayInterval) {
+			clearInterval(autoplayInterval);
+		}
+	}
+
+	// Dot navigation
+	dots.forEach((dot) => {
+		dot.addEventListener('click', () => {
+			const index = parseInt(dot.getAttribute('data-index') || '0');
+			showSlide(index);
+			stopAutoplay();
+			startAutoplay();
+		});
+	});
+
+	// Pause on hover
+	const container = document.querySelector('.hero-container');
+	if (container) {
+		container.addEventListener('mouseenter', stopAutoplay);
+		container.addEventListener('mouseleave', startAutoplay);
+	}
+
+	// Start autoplay
+	startAutoplay();
+</script>
+
 <style>
-.banner-wrapper {
+.hero-banner {
 	position: relative;
 	width: 100%;
 	margin-bottom: 0;
 	overflow: hidden;
 }
 
-.banner-container {
+.hero-container {
 	position: relative;
 	width: 100%;
-	height: 350px;
+	height: 400px;
 	overflow: hidden;
-	border-radius: 0.75rem;
+	border-radius: 1rem;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.banner-image {
+.hero-slide {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	transition: opacity 1.2s ease-in-out;
+	z-index: 1;
+}
+
+.hero-slide.active {
+	opacity: 1;
+	z-index: 2;
+}
+
+.hero-image {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
 	object-position: center center;
+	animation: kenBurns 20s ease-in-out infinite alternate;
 }
 
-/* Subtle fade overlay at bottom */
-.banner-fade-overlay {
+/* Ken Burns effect - subtle zoom and pan */
+@keyframes kenBurns {
+	0% {
+		transform: scale(1) translate(0, 0);
+	}
+	100% {
+		transform: scale(1.08) translate(-2%, -1%);
+	}
+}
+
+/* Vignette overlay for depth and elegance */
+.hero-vignette {
 	position: absolute;
-	bottom: 0;
+	top: 0;
 	left: 0;
 	right: 0;
-	height: 120px;
-	background: linear-gradient(
-		to bottom,
-		transparent 0%,
-		rgba(0, 0, 0, 0.2) 60%,
-		rgba(0, 0, 0, 0.4) 100%
-	);
-	z-index: 5;
+	bottom: 0;
+	background:
+		radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.15) 100%),
+		linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.3) 100%);
+	z-index: 3;
 	pointer-events: none;
 }
 
-/* Dark mode fade */
-:global(.dark) .banner-fade-overlay {
-	background: linear-gradient(
-		to bottom,
-		transparent 0%,
-		rgba(0, 0, 0, 0.3) 60%,
-		rgba(0, 0, 0, 0.5) 100%
-	);
+/* Dark mode vignette */
+:global(.dark) .hero-vignette {
+	background:
+		radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.25) 100%),
+		linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+/* Elegant dots navigation */
+.hero-dots {
+	position: absolute;
+	bottom: 1.5rem;
+	left: 50%;
+	transform: translateX(-50%);
+	display: flex;
+	gap: 0.5rem;
+	z-index: 10;
+	background: rgba(0, 0, 0, 0.2);
+	backdrop-filter: blur(8px);
+	padding: 0.5rem 1rem;
+	border-radius: 2rem;
+}
+
+.hero-dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.4);
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	padding: 0;
+}
+
+.hero-dot:hover {
+	background: rgba(255, 255, 255, 0.7);
+	transform: scale(1.2);
+}
+
+.hero-dot.active {
+	background: white;
+	width: 24px;
+	border-radius: 4px;
 }
 
 @media (max-width: 768px) {
-	.banner-container {
-		height: 200px;
-		border-radius: 0.5rem;
+	.hero-container {
+		height: 250px;
+		border-radius: 0.75rem;
 	}
 
-	.banner-fade-overlay {
-		height: 80px;
+	.hero-dots {
+		bottom: 1rem;
+		padding: 0.4rem 0.8rem;
+		gap: 0.4rem;
+	}
+
+	.hero-dot {
+		width: 6px;
+		height: 6px;
+	}
+
+	.hero-dot.active {
+		width: 18px;
+	}
+
+	@keyframes kenBurns {
+		0% {
+			transform: scale(1) translate(0, 0);
+		}
+		100% {
+			transform: scale(1.05) translate(-1%, 0);
+		}
 	}
 }
 </style>
