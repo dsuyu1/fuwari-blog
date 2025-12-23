@@ -87,6 +87,11 @@ export const profileConfig: ProfileConfig = {
 	bio: "RSOC Student Analyst | Undergraduate Researcher | Computer Science @ UTRGV '26",
 	links: [
 		{
+			name: "Email",
+			icon: "material-symbols:mail-outline",
+			url: "mailto:damian.villarreal01@utrgv.edu",
+		},
+		{
 			name: "LinkedIn",
 			icon: "cib:linkedin", // Visit https://icones.js.org/ for icon codes
 			// You will need to install the corresponding icon set if it's not already included
