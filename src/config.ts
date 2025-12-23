@@ -92,6 +92,11 @@ export const profileConfig: ProfileConfig = {
 			url: "mailto:damian.villarreal01@utrgv.edu",
 		},
 		{
+			name: "Discord",
+			icon: "ic:baseline-discord",
+			url: "https://discord.com/users/dsuyu",
+		},
+		{
 			name: "LinkedIn",
 			icon: "cib:linkedin", // Visit https://icones.js.org/ for icon codes
 			// You will need to install the corresponding icon set if it's not already included
