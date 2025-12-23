@@ -4,16 +4,13 @@ import { siteConfig } from "../config";
 const banner = siteConfig.banner;
 const images = Array.isArray(banner.src) ? banner.src : [banner.src];
 const position = banner.position || "center";
-const autoRotate = banner.autoRotate ?? true;
-const interval = banner.interval ?? 5000;
 
-// Import images at build time
+// Import all images
 const imageImports = await Promise.all(
 	images.map(async (img) => {
 		if (img.startsWith('/') || img.startsWith('http')) {
 			return img;
 		}
-		// For assets in src/assets, use dynamic import
 		try {
 			const imported = await import(`../assets/images/${img.replace('assets/images/', '')}`);
 			return imported.default.src;
@@ -25,271 +22,231 @@ const imageImports = await Promise.all(
 ---
 
 {banner.enable && (
-	<div class="banner-carousel">
-		<div class="banner-container">
+	<div class="hero-banner">
+		<div class="hero-container">
 			{imageImports.map((img, index) => (
-				<img 
-					src={img}
-					alt={`Banner ${index + 1}`}
-					class:list={['banner-image', { active: index === 0 }]}
-					style={`object-position: ${position}`}
-					loading={index === 0 ? 'eager' : 'lazy'}
-				/>
+				<div class:list={['hero-slide', { active: index === 0 }]}>
+					<img
+						src={img}
+						alt={`Photo ${index + 1}`}
+						class="hero-image"
+						style={`object-position: ${position}`}
+						loading={index === 0 ? 'eager' : 'lazy'}
+					/>
+				</div>
 			))}
-			
-			<div class="banner-fade-overlay"></div>
-			
-			{images.length > 1 && (
-				<>
-					<button class="banner-nav prev" aria-label="Previous image">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-							<polyline points="15 18 9 12 15 6"></polyline>
-						</svg>
-					</button>
-					<button class="banner-nav next" aria-label="Next image">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-							<polyline points="9 18 15 12 9 6"></polyline>
-						</svg>
-					</button>
-				</>
+
+			<!-- Vignette overlay for depth -->
+			<div class="hero-vignette"></div>
+
+			<!-- Elegant dots navigation -->
+			{imageImports.length > 1 && (
+				<div class="hero-dots">
+					{imageImports.map((_, index) => (
+						<button
+							class:list={['hero-dot', { active: index === 0 }]}
+							data-index={index}
+							aria-label={`Go to photo ${index + 1}`}
+						></button>
+					))}
+				</div>
 			)}
 		</div>
-		
-		{banner.credit.enable && (
-			<div class="banner-credit">
-				{banner.credit.url ? (
-					<a href={banner.credit.url} target="_blank" rel="noopener noreferrer">
-						{banner.credit.text}
-					</a>
-				) : (
-					<span>{banner.credit.text}</span>
-				)}
-			</div>
-		)}
 	</div>
 )}
 
-<script define:vars={{ autoRotate, interval }}>
-	const images = document.querySelectorAll('.banner-image');
-	const prevBtn = document.querySelector('.banner-nav.prev');
-	const nextBtn = document.querySelector('.banner-nav.next');
-	
-	let currentIndex = 0;
-	let autoRotateInterval;
 
-	function showImage(index) {
-		images.forEach((img, i) => {
-			img.classList.toggle('active', i === index);
+<script>
+	const slides = document.querySelectorAll('.hero-slide');
+	const dots = document.querySelectorAll('.hero-dot');
+	let currentIndex = 0;
+	let autoplayInterval;
+
+	function showSlide(index) {
+		slides.forEach((slide, i) => {
+			slide.classList.toggle('active', i === index);
+		});
+		dots.forEach((dot, i) => {
+			dot.classList.toggle('active', i === index);
 		});
 		currentIndex = index;
 	}
 
-	function nextImage() {
-		showImage((currentIndex + 1) % images.length);
+	function nextSlide() {
+		const next = (currentIndex + 1) % slides.length;
+		showSlide(next);
 	}
 
-	function prevImage() {
-		showImage((currentIndex - 1 + images.length) % images.length);
-	}
-
-	function startAutoRotate() {
-		if (autoRotate && images.length > 1) {
-			autoRotateInterval = setInterval(nextImage, interval);
+	function startAutoplay() {
+		if (slides.length > 1) {
+			autoplayInterval = setInterval(nextSlide, 5000);
 		}
 	}
 
-	function stopAutoRotate() {
-		if (autoRotateInterval) {
-			clearInterval(autoRotateInterval);
+	function stopAutoplay() {
+		if (autoplayInterval) {
+			clearInterval(autoplayInterval);
 		}
 	}
 
-	function resetAutoRotate() {
-		stopAutoRotate();
-		startAutoRotate();
-	}
-
-	// Navigation buttons
-	if (nextBtn) {
-		nextBtn.addEventListener('click', () => {
-			nextImage();
-			resetAutoRotate();
+	// Dot navigation
+	dots.forEach((dot) => {
+		dot.addEventListener('click', () => {
+			const index = parseInt(dot.getAttribute('data-index') || '0');
+			showSlide(index);
+			stopAutoplay();
+			startAutoplay();
 		});
-	}
-
-	if (prevBtn) {
-		prevBtn.addEventListener('click', () => {
-			prevImage();
-			resetAutoRotate();
-		});
-	}
-
-	// Keyboard navigation
-	document.addEventListener('keydown', (e) => {
-		if (images.length <= 1) return;
-		
-		if (e.key === 'ArrowLeft') {
-			prevImage();
-			resetAutoRotate();
-		} else if (e.key === 'ArrowRight') {
-			nextImage();
-			resetAutoRotate();
-		}
 	});
 
 	// Pause on hover
-	const container = document.querySelector('.banner-container');
+	const container = document.querySelector('.hero-container');
 	if (container) {
-		container.addEventListener('mouseenter', stopAutoRotate);
-		container.addEventListener('mouseleave', startAutoRotate);
+		container.addEventListener('mouseenter', stopAutoplay);
+		container.addEventListener('mouseleave', startAutoplay);
 	}
 
-	// Start auto-rotation
-	startAutoRotate();
+	// Start autoplay
+	startAutoplay();
 </script>
 
 <style>
-.banner-carousel {
+.hero-banner {
 	position: relative;
 	width: 100%;
 	margin-bottom: 0;
 	overflow: hidden;
 }
 
-.banner-container {
+.hero-container {
 	position: relative;
 	width: 100%;
-	height: 1000px;
+	height: 400px;
 	overflow: hidden;
-	border-radius: 0.5rem;
+	border-radius: 1rem;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.banner-image {
+.hero-slide {
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
+	opacity: 0;
+	transition: opacity 1.2s ease-in-out;
+	z-index: 1;
+}
+
+.hero-slide.active {
+	opacity: 1;
+	z-index: 2;
+}
+
+.hero-image {
+	width: 100%;
+	height: 100%;
 	object-fit: cover;
 	object-position: center center;
-	opacity: 0;
-	transition: opacity 0.6s ease-in-out;
-	transform: scale(1);
-	transform-origin: center center;
+	animation: kenBurns 20s ease-in-out infinite alternate;
 }
 
-.banner-image.active {
-	opacity: 1;
+/* Ken Burns effect - subtle zoom and pan */
+@keyframes kenBurns {
+	0% {
+		transform: scale(1) translate(0, 0);
+	}
+	100% {
+		transform: scale(1.08) translate(-2%, -1%);
+	}
 }
 
-/* Fade overlay at bottom - more visible */
-.banner-fade-overlay {
+/* Vignette overlay for depth and elegance */
+.hero-vignette {
 	position: absolute;
-	bottom: 0;
+	top: 0;
 	left: 0;
 	right: 0;
-	height: 250px;
-	background: linear-gradient(
-		to bottom,
-		transparent 0%,
-		rgba(0, 0, 0, 0.5) 70%,
-		rgba(0, 0, 0, 0.8) 100%
-	);
-	z-index: 5;
+	bottom: 0;
+	background:
+		radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.15) 100%),
+		linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.3) 100%);
+	z-index: 3;
 	pointer-events: none;
 }
 
-/* Dark mode fade */
-:global(.dark) .banner-fade-overlay {
-	background: linear-gradient(
-		to bottom,
-		transparent 0%,
-		rgba(0, 0, 0, 0.6) 70%,
-		rgba(0, 0, 0, 0.9) 100%
-	);
+/* Dark mode vignette */
+:global(.dark) .hero-vignette {
+	background:
+		radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.25) 100%),
+		linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
 }
 
-/* Stylish arrow navigation - centered vertically */
-.banner-nav {
+/* Elegant dots navigation */
+.hero-dots {
 	position: absolute;
-	top: 50%; /* Center of container */
-	transform: translateY(-50%);
-	background: rgba(255, 255, 255, 0.15);
-	backdrop-filter: blur(12px);
-	color: white;
-	border: 1px solid rgba(255, 255, 255, 0.25);
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
-	cursor: pointer;
+	bottom: 1.5rem;
+	left: 50%;
+	transform: translateX(-50%);
 	display: flex;
-	align-items: center;
-	justify-content: center;
-	transition: all 0.3s ease;
+	gap: 0.5rem;
 	z-index: 10;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	background: rgba(0, 0, 0, 0.2);
+	backdrop-filter: blur(8px);
+	padding: 0.5rem 1rem;
+	border-radius: 2rem;
 }
 
-.banner-nav:hover {
-	background: rgba(255, 255, 255, 0.25);
-	border-color: rgba(255, 255, 255, 0.4);
-	transform: translateY(-50%) scale(1.1);
-	box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+.hero-dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.4);
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	padding: 0;
 }
 
-.banner-nav:active {
-	transform: translateY(-50%) scale(0.95);
+.hero-dot:hover {
+	background: rgba(255, 255, 255, 0.7);
+	transform: scale(1.2);
 }
 
-.banner-nav svg {
-	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-.banner-nav.prev {
-	left: 2rem;
-}
-
-.banner-nav.next {
-	right: 2rem;
-}
-
-.banner-credit {
-	margin-top: 0.5rem;
-	text-align: center;
-	font-size: 0.875rem;
-	opacity: 0.7;
-}
-
-.banner-credit a {
-	color: inherit;
-	text-decoration: underline;
-	transition: opacity 0.3s ease;
-}
-
-.banner-credit a:hover {
-	opacity: 1;
+.hero-dot.active {
+	background: white;
+	width: 24px;
+	border-radius: 4px;
 }
 
 @media (max-width: 768px) {
-	.banner-container {
+	.hero-container {
 		height: 250px;
+		border-radius: 0.75rem;
 	}
 
-	.banner-nav {
-		width: 40px;
-		height: 40px;
+	.hero-dots {
+		bottom: 1rem;
+		padding: 0.4rem 0.8rem;
+		gap: 0.4rem;
 	}
 
-	.banner-nav.prev {
-		left: 1rem;
+	.hero-dot {
+		width: 6px;
+		height: 6px;
 	}
 
-	.banner-nav.next {
-		right: 1rem;
+	.hero-dot.active {
+		width: 18px;
 	}
 
-	.banner-fade-overlay {
-		height: 150px;
+	@keyframes kenBurns {
+		0% {
+			transform: scale(1) translate(0, 0);
+		}
+		100% {
+			transform: scale(1.05) translate(-1%, 0);
+		}
 	}
 }
 </style>

@@ -28,7 +28,7 @@ export const siteConfig: SiteConfig = {
 		fixed: false, // Hide the theme color picker for visitors
 	},
 	banner: {
-		enable: true,
+		enable: false,
 		src: [
 			banner5.src,
 			banner16.src,
@@ -86,6 +86,16 @@ export const profileConfig: ProfileConfig = {
 	name: "Damian Villarreal",
 	bio: "RSOC Student Analyst | Undergraduate Researcher | Computer Science @ UTRGV '26",
 	links: [
+		{
+			name: "Email",
+			icon: "material-symbols:mail-outline",
+			url: "mailto:damian.villarreal01@utrgv.edu",
+		},
+		{
+			name: "Discord",
+			icon: "ic:baseline-discord",
+			url: "https://discord.com/users/dsuyu",
+		},
 		{
 			name: "LinkedIn",
 			icon: "cib:linkedin", // Visit https://icones.js.org/ for icon codes
