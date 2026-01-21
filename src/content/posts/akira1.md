@@ -98,10 +98,6 @@ We can also find an interesting extension: `.arika`. A typo? Maybe. In other rep
 
 If we double-click on the misspelled extension, we're taken to a _huuuuge_ function - 2165 lines long to be exact. We've found Akira's main encryption engine! We will go over this function (`FUN_1400b71a0`) later. 
 
-### Determing file, directory, and extension blacklists
-
-
-
 # 2. Entry Point Analysis
 We can use `objdump` to get some info on the file.
 
