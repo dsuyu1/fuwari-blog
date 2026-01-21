@@ -331,13 +331,13 @@ Notably, the arguments the program takes can be found as strings:
 
 Remember, Akira is itself a program meant to be executed by somebody or something. It makes sense that it would take argument parameters to affect its execution. The arguments it takes includes:
 
-- --encryption_path
-- --encryption_percent
-- --exclude
-- --share_file
-- -dellog
-- -ep bypass -Command
-- -localonly
+- `--encryption_path`
+- `--encryption_percent`
+- `--exclude`
+- `--share_file`
+- `-dellog`
+- `-ep bypass -Command`
+- `-localonly`
 
 ## 3.3 Configuration Validation
 If the user specified specific arguments, this is where they would get set. Otherwise, Akira moves on with defaults:
