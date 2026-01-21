@@ -533,7 +533,7 @@ Key Findings:
 - Shadow copy deletion via PowerShell to prevent recovery
 
 
-In Part 2, we'll dive deep into that massive FUN_1400b71a0() function we spotted - the 2165-line encryption engine. We'll analyze:
+In Part 2, we'll dive deep into that massive `FUN_1400b71a0()` function we spotted - the 2165-line encryption engine. We'll analyze:
 
 - The custom cryptographic implementation
 - How the RSA public key in .rdata is used
