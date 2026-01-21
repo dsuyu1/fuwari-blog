@@ -25,6 +25,12 @@ I also recommend looking at these supplementary materials as well if you are cur
 
 Reverse engineering is a fascinating area of cybersecurity. It plays an important role in digital forensics and vulnerability research, but it is also valuable for red teams seeking to understand how systems can be compromised. In this series, however, we will examine malware through the lens of blue teams. How can we dismantle malware, identify its weaknesses, and use that knowledge to develop effective defenses? How can this process better equip us to combat ransomware? These are the questions I hope to explore.
 
+## What is Akira?
+According to [SentinelOne](https://www.sentinelone.com/anthology/akira/), Akira ransomware operations were initiated in March 2023. Actors behind Akira practice multi-extortion tactics and host a TOR-based (.onion) website where victims are listed along with any stolen data should a victim fail to comply with the ransom demands. Victims are instructed to contact the attacker via their TOR-based portal (.onion) where they enter a unique identifier provided in the ransom note they receive to begin the negotiation process. The group is known to require outrageous ransom payments, reaching hundreds of millions of dollars. 
+
+Akira attackers do not discriminate when it comes to victimology outside of targeting large enterprises. As of this writing, educational institutions as well as those in the financial, manufacturing, real estate, and medical industries are all known targets of Akira attackers.
+
+
 ## Setup
 I'll be using a REMnux container via Docker on a Windows 11 machine. To run Ghidra from the REMnux Docker container, you'll need to set up X11 forwarding:
 
