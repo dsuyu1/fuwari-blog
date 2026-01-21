@@ -32,8 +32,8 @@ Akira attackers do not discriminate when it comes to victimology outside of targ
 
 ## Deliverables
 1. Become familiar with Ghidra
-2. Find the important stuff
-3. Determine next steps
+2. Demonstrate preliminary analysis
+3. Find points of interest
 
 ## Setup
 I'll be using a REMnux container via Docker on a Windows 11 machine. To run Ghidra from the REMnux Docker container, you'll need to set up X11 forwarding:
