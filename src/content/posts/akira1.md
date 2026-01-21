@@ -30,6 +30,10 @@ According to [SentinelOne](https://www.sentinelone.com/anthology/akira/), Akira 
 
 Akira attackers do not discriminate when it comes to victimology outside of targeting large enterprises. As of this writing, educational institutions as well as those in the financial, manufacturing, real estate, and medical industries are all known targets of Akira attackers.
 
+## Deliverables
+1. Become familiar with Ghidra
+2. Find the important stuff
+3. Determine next steps
 
 ## Setup
 I'll be using a REMnux container via Docker on a Windows 11 machine. To run Ghidra from the REMnux Docker container, you'll need to set up X11 forwarding:
