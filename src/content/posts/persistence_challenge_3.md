@@ -1,10 +1,8 @@
 ---
 title: "Persistence Challenge 3"
 published: 2026-1-22T00:00:00-08:00
-tags: [Ghidra, Digital Forensics, Reverse Engineering, Ransomware]
-description: "A technical analysis of the cryptography used by the Akira ransomware variant."
+tags: [Rangeforce, Incident Response]
 category: Cybersecurity
-image: /akira.jpg
 draft: true
 ---
 
