@@ -36,7 +36,7 @@ You can find the hash using `sha256sum` in the command line. I submitted the has
 `97435ab8be1983337bf241ccc693f6bbe57be3ac2e1920703de78523be97c041`
 
 # Part 2: Ransom Note
-You can use the contents of the ransom note itself to find the ransomware name.
+You can use the contents of the ransom note itself to find the ransomware name. For example, notice how there's a spelling mistake in the ransom note. 
 
 ```
 Your network has been penetrated.
@@ -95,6 +95,7 @@ btpsupport@protonmail.com
 3. _What is the variant of ransomware?_
 
 [DoppelPaymer](https://id.provendata.com/ransomware/bitpaymer-doppelpaymer/unknown-022)
+
 Apparently this ransomware has no decryption algorithm yet.
 
 4. _What is the URL that can be found in the ransom note?_
