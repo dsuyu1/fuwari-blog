@@ -1,31 +1,39 @@
 ---
-title: "Junior SOC Analyst 2 Capstone"
+title: "RangeForce: Junior SOC Analyst 2 Capstone"
 published: 2026-1-23T00:00:00-08:00
-tags: [Rangeforce, Incident Response]
+tags: [Rangeforce, Incident Response, Walkthrough]
 category: Cybersecurity
+image: /rangeforce2.png
 draft: false
 ---
+
 # Part 1: Phishing Email
 All answers to the question can be found using the provided email contents and the SHA-256 hash of the executable.
 
-_What is the subject line of the email?_
+1. _What is the subject line of the email?_
+
 `Application for the Position of Software Developer`
 
-_Who sent the email?_
+2. _Who sent the email?_
+
 jsmythe1337@protonmail.com
 
-_Who received the email?_
+3. _Who received the email?_
+
 Lorrie.Hayter@commensuratetechnology.com
 
-_What is the name of the attachment?_
-Jonathan Smythe CV.exe
+4. _What is the name of the attachment?_
 
-_What is the name of the trojan malware the attachment is suspected to contain?_
+`Jonathan Smythe CV.exe`
+
+5. _What is the name of the trojan malware the attachment is suspected to contain?_
+
 You can find the hash using `sha256sum` in the command line. I submitted the hash to VirusTotal and found the trojan name.
 [dridex](https://www.virustotal.com/gui/file/97435ab8be1983337bf241ccc693f6bbe57be3ac2e1920703de78523be97c041)
 
-_What is the SHA-256 hash of the malware?_
-97435ab8be1983337bf241ccc693f6bbe57be3ac2e1920703de78523be97c041
+6. _What is the SHA-256 hash of the malware?_
+
+`97435ab8be1983337bf241ccc693f6bbe57be3ac2e1920703de78523be97c041`
 
 # Part 2: Ransom Note
 You can use the contents of the ransom note itself to find the ransomware name.
@@ -76,20 +84,20 @@ FXGp1P0mggYCx3oEo+IpdKdPTohqL5wfTDgMKblsHtQKTD9QMw37SpKI5G6uEXs5zUOiPmcSvOdI
 mw5u
 ```
 
-_What application are you instructed to download and install in the ransom note?_
+1. _What application are you instructed to download and install in the ransom note?_
 
 Tor
 	
-_What email is provided in the ransom note if you have any questions?_
+2. _What email is provided in the ransom note if you have any questions?_
 
 btpsupport@protonmail.com
 	
-_What is the variant of ransomware?_
+3. _What is the variant of ransomware?_
 
 [DoppelPaymer](https://id.provendata.com/ransomware/bitpaymer-doppelpaymer/unknown-022)
 Apparently this ransomware has no decryption algorithm yet.
 
-_What is the URL that can be found in the ransom note?_
+4. _What is the URL that can be found in the ransom note?_
 
 http://q7wp5u55lhtuafjtsl6lkt24z4wvon2jexfzhzqqfrt3bqnpqboyqoid.onion/order/b65dd758-e6bf-11e9-9468-00163eea179c
 
@@ -107,10 +115,11 @@ ESTAB  0      0      [::ffff:192.168.6.1]:ms-wbt-server  [::ffff:192.168.6.254]:
 ```
 
 Use `ss -atp` to find listeninig sockets and their processes.
-
 	
-_What is the IP of the C&C server?_
+1. _What is the IP of the C&C server?_
+
 66.240.236.117
 
-_To what port is the malware connecting to on the C&C server?_
+2. _To what port is the malware connecting to on the C&C server?_
+
 50780
