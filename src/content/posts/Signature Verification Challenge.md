@@ -29,7 +29,7 @@ First, feed the keys you're given to GPG's keyring with `gpg --import /home/stud
 
 ![](/src/assets/images/svc1.png)
 
-![](src/assets/images/gpgp2.png)
+![](/src/assets/images/gpgp2.png)
 
 #### 2. _What is the full path to the commit message with the forged signature?_
 
