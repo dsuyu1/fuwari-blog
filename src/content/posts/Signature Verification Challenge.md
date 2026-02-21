@@ -27,9 +27,9 @@ Answer: **991D55A8CF0EB6FF7342C6FC04160FFF24F64162**
 
 First, feed the keys you're given to GPG's keyring with `gpg --import /home/student/keys/*`. Then, verify the messages with `gpg --verify`.
 
-![image1](/src/assets/images/svc1.png)
+![image1](/svc1.png) <!-- move svc1.png from src/assets/images into public/ for production -->
 
-![image2](/src/assets/images/gpgp2.png)
+![image2](/gpgp2.png) <!-- move gpgp2.png from src/assets/images into public/ for production -->
 
 #### 2. _What is the full path to the commit message with the forged signature?_
 

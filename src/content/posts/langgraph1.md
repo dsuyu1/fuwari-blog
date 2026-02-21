@@ -38,7 +38,7 @@ Each part of this series focuses on a specific aspect of intelligent agent desig
 # Introduction to Workflows with LangGraph
 <div align="center">
 
-![workflow](src/assets/images/langgraph/agenticworkflow.png)
+![workflow](/langgraph/agenticworkflow.png) <!-- move this file into public/langgraph/ -->
 
 <small>
 
@@ -362,7 +362,7 @@ display(Image(app.get_graph().draw_mermaid_png()))
 ```
 <div align="center">
 
-![Graph](src/assets/images/langgraph/graph2.png)
+![Graph](/langgraph/graph2.png) <!-- move this file into public/langgraph/ -->
 
 </div>
 
