@@ -68,9 +68,13 @@ Split dataset by metadata
 Data Curation completed
 ```
 
+![The finished curation pipeline output](/data_curation.png)
+
 So what exactly happened? 
 1. Data Collection: We downloaded raw data from three sources: Wikipedia (text), GitHub repositories (code), and arXiv PDFs. These represent the domain-specific knowledge you'd use to fine-tune a language model. 
 2. Data Curation: The raw data was then run through a curation pipeline. This included cleaning and unifying the formatting (like fixing unicode issues), filtering by line count to remove trivially short documents, exact deduplication to remove identical document, and PII redaction on code files.
 - The PII redaction was done with the[spaCy](https://spacy.io/) and [Presidio](https://microsoft.github.io/presidio/) recognizers. We stripped emails, phone numbers, SSNs, etc.
 
-Looking at the results, we can see that all text documents passed the filters.
+Looking at the results, we can see that all 10 text documents passed the quality filters (none were dropped). However, for the code, we had 13,864 documents in, and 13,852 out; 12 documents were dropped as duplicates or were too short. 
+
+The curated data was written to /data/curated/
