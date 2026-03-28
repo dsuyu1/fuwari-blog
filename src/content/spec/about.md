@@ -11,10 +11,10 @@ I'm always open to new opportunities, collaborations, and conversations! Whether
 
 <div align="center">
 
-![Me with the RSOC](/RSOC.jpg) <!-- move RSOC.jpg into public/ -->
+![Me with the RSOC](/RSOC.jpg)
 <small> Friendsgiving at the Regional Security Operations Center. </small>
 
-![Studying abroad in Korea](/abroad.JPG) <!-- move abroad.JPG into public/ -->
+![Studying abroad in Korea](/abroad.JPG)
 <small> Studying abroad in South Korea. </small>
 
 
