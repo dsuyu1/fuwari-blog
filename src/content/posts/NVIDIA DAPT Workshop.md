@@ -14,7 +14,9 @@ My university gave me the privilege of accessing NVIDIA's catalog of hands-on wo
 
 [Domain-Adaptive Pre-Training (DAPT)](https://marutitech.com/domain-adaptive-pretraining-llms/) is the process of further training pre-trained general LLMs on domain-specific data. For example, we might train an LLM on curated cybersecurity data to make it better at answering cyber-specific questions.
 
-In this workshop, I dive into how to perform DAPT using NVIDIA's toolkit.
+In this workshop, I dive into how to perform DAPT using NVIDIA's toolkit:
+- NeMo Curator
+- 
 
 If you're curious, here are the dependencies for the notebook:
 
@@ -274,7 +276,7 @@ Each downloader writes raw content to a `.jsonl` file for [NeMo Curator](https:/
 
 ### 1.21 Curation Pipeline
 
-The raw data is processed through the **curation pipeline**:
+The raw data is processed through the [**curation pipeline**](https://developer.nvidia.com/blog/streamlining-data-processing-for-domain-adaptive-pretraining-with-nvidia-nemo-curator/): 
 - clean and unify formatting (e.g., Unicode normalization)
 - line-count filtering to remove too-short documents
 - exact deduplication to remove identical documents
@@ -369,7 +371,7 @@ This oversamples Verilog/VHDL and text, which is useful for chip-design-focused 
 Shuffling occurs after blending:
 
 ```py frame="code" title="Shuffle after blend"
-shuffle = nc.Shuffle(seed=42)
+shuffle = nc.Shuffle(seed=42) # The `seed=42` ensures reproducible shuffling for research.
 blended_dataset = shuffle(blended_dataset)
 ```
 
@@ -390,8 +392,6 @@ An animation of gradient descent. [Source](https://chengjun.github.io/mybook/08-
 </small>
 
 </div>
-
-The `seed=42` ensures reproducible shuffling for research.
 
 ### 1.23 Results
 
