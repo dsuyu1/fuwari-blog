@@ -51,6 +51,23 @@ First 500 bytes: b'Please set a user-agent and respect our robot policy https://
 
 You may have to reduce the number of workers. 8 workers each loading spaCy's large model simultaneously was too much for my potato of a machine. I reduced it to two so that it wouldn't crash and the program could move on to the curation pipeline. 8 workers was nice for downloading all the sources. I would get up and do chores in between runs, haha.
 
+Here's what I did to solve the rate limiting problem:
+
+```bash
+root@c18921b74f46:/dli/task/01_data_curation/dapt-curation-demo# python3 -c "
+content = open('/dli/task/01_data_curation/dapt-curation-demo/docbuilder.py').read()
+old = '        if article := next(search_result):\n            print(f\'Downloading arXiv article \"{url}\"...\')\n            pdf_path = article.download_pdf(\n                dirpath=self.pdf_root_dir, filename=pdf_name\n            )\n        else:\n            print(f\"Failed to download article \'{url}\'.\")\n            return None'
+new = '        try:\n            article = next(search_result, None)\n            if article:\n                print(f\'Downloading arXiv article \"{url}\"...\')\n                pdf_path = article.download_pdf(dirpath=self.pdf_root_dir, filename=pdf_name)\n            else:\n                print(f\"Failed to download article \'{url}\'.\")\n                return None\n        except Exception as e:\n            print(f\"Skipping \'{url}\': {e}\")\n            return None'
+result = content.replace(old, new, 1)
+if result == content:
+    print('ERROR: string not found')
+else:
+    open('/dli/task/01_data_curation/dapt-curation-demo/docbuilder.py', 'w').write(result)
+    print('Done')
+"
+Done
+```
+
 ## Reviewing the Data Curation Pipeline
 
 If everything is running as it should, you should see something like this in the terminal:
@@ -78,3 +95,7 @@ So what exactly happened?
 Looking at the results, we can see that all 10 text documents passed the quality filters (none were dropped). However, for the code, we had 13,864 documents in, and 13,852 out; 12 documents were dropped as duplicates or were too short. 
 
 The curated data was written to /data/curated/
+
+# 2. Custom Tokenization
+
+![Tokenization diagram](/data_tokenization.png)
