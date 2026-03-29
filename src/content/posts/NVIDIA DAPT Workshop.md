@@ -10,13 +10,13 @@ draft: false
 
 # Introduction
 
-My university gave me the privilege of accessing NVIDIA's catalog of hands-on workshops for free. In this blog post, I cover _Domain-Adaptive Pre-Training: Tailoring LLMs for Specialized Applications_. If you'd like to learn more about Domain-Adaptive Pre-Training (DAPT), please read on!
+My university gave me the privilege of accessing NVIDIA's catalog of hands-on workshops for free. In this blog post, I cover _Domain-Adaptive Pre-Training: Tailoring LLMs for Specialized Applications_. This workshop is closely aligned with NVIDIA's NeMo Curator ecosystem: the hands-on lab uses NeMo Curator to ingest, clean, deduplicate, and filter domain-specific data before applying DAPT.
+
+![NVIDIA's DAPT process for NeMo Chip LLM](/data-processing-training-domain-specific-llms-1024x270.jpg)
 
 [Domain-Adaptive Pre-Training (DAPT)](https://marutitech.com/domain-adaptive-pretraining-llms/) is the process of further training pre-trained general LLMs on domain-specific data. For example, we might train an LLM on curated cybersecurity data to make it better at answering cyber-specific questions.
 
-In this workshop, I dive into how to perform DAPT using NVIDIA's toolkit:
-- NeMo Curator
-- 
+In this workshop, I dive into how to perform DAPT using NVIDIA's toolkit.
 
 If you're curious, here are the dependencies for the notebook:
 
@@ -375,7 +375,7 @@ shuffle = nc.Shuffle(seed=42) # The `seed=42` ensures reproducible shuffling for
 blended_dataset = shuffle(blended_dataset)
 ```
 
-Without shuffling, the dataset would be grouped by source and can cause catastrophic forgetting. Interleaving source types in training batches stabilizes learning and improves retention.
+Without shuffling, the dataset would be grouped by source and can cause **catastrophic forgetting**. Interleaving source types in training batches stabilizes learning and improves retention.
 
 :::note
 [**Catastrophic forgetting**](https://www.ibm.com/think/topics/catastrophic-forgetting) happens because neural networks update weights via _gradient descent_. If you feed all Verilog first, those gradients push weights in one direction, then all-text gradients push them back. Interleaved batches mean each gradient update sees a mix, so no single domain dominates and overwrites another.
