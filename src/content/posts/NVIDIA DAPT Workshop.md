@@ -70,14 +70,14 @@ When running the non-demo version of the DAPT Curation Jupyter Notebook, I encou
 
 - `NumPy` compatibility: modules compiled with NumPy 1.x may fail on NumPy 2.2.6. To support both versions, recompile or use NumPy 2.0.
 
-```bash
+```bash frame="code" title="Pin NumPy for compatibility"
 pip install "numpy<2" --break-system-packages
 ```
 
 - Rate limits from arXiv when downloading many files. Add delays and reduce concurrency if needed.
 - Wikipedia may return 403 unless a User-Agent header is included.
 
-```bash
+```bash frame="code" title="Wikipedia request example"
 url = 'https://en.wikipedia.org/wiki/PowerPC'
 response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
 print('Status:', response.status_code)
@@ -100,7 +100,7 @@ The workshop used 8 [Dask workers](https://docs.dask.org/en/stable/) to fetch ar
 <details>
 <summary>Show patch</summary>
 
-```bash 
+```bash frame="code" title="DAPT compatibility patch script"
 cat > /tmp/fix_all.py << 'ENDOFSCRIPT'
 # ============================================================
 # DAPT Workshop - Comprehensive Fix Script
@@ -462,7 +462,7 @@ Without further ado, let's get into the steps!
 ## 2.1 Training a tokenizer from scratch
 The first step is training a new tokenizer from scratch using domain-specific data. We use facebook/opt-350m model as our _training template_. Notice how this is completely independent from the base/foundational model we'll be using later (llama-2-7b). 
 
-```py frame="code"
+```py frame="code" title="Train tokenizer from scratch"
 data_root = "./curated_sample_data/curated_data/"
 save_root = "./models/tokenizer/llama2/"
 batch_size = 1000
@@ -502,7 +502,7 @@ More important hyperparameters:
     - depends on model size: larger number of partitions for larger models (>13B, split = 8 or higher)
 - **model_type**: original tokenizer model (`llama2`)
 
-```py
+```py frame="code" title="Extend tokenizer vocab"
 split = 1       # number of .pt embedding partitions
 model_type = "llama2"
 
@@ -527,7 +527,7 @@ Hyperparameters:
         - Adding more tokens increases embedding table size
         - Too many tokens may slow down convergence during DAPT pretraining
 
-```py frame="code"
+```py frame="code" title="Analyze token usage frequency"
 freq_threshold = 0.98  # keep tokens accounting for top 98% of usage
 extended_tokenizer_path = f"./models/tokenizer/{model_type}/new_tokenizer/tokenizer_code_gen.model"
 
@@ -545,7 +545,7 @@ Embedding table and output-layer weights of the tokenizer depend on the _vocab s
     - Embeddings of sub-tokens are averaged to initialize the embedding of the new token
 3. Initialize weights in the output layer corresponding to the new token as the average of the sub-token weights
 
-```py frame="code"
+```py frame="code" title="Initialize new token embeddings"
 f = open(high_freq_tokens_path, "r")
 new_tokens = json.load(f)
 print("New tokens being added:", new_tokens)
@@ -574,7 +574,7 @@ Take a look at this diagram. On the left, we have the previous embedding table. 
 
 After custom tokenization, we see an additional **1300 domain-specific tokens**. You still retain the original 3200 tokens while adding more domain-specific tokens. Notice how the number of columns stays the same: this represents the dimensionality of the token vectors. This implies that each token is still embedded in the same n-dimensional space.
 
-```py frame="code"
+```py frame="code" title="Merge tokenizer embeddings"
 old_ebd_path = f"./models/weight/{model_type}-hf"           # original HF weights
 new_ebd_path = f"./models/weight/{model_type}/new_{model_type}-hf_weight"  # augmented embeddings
 save_path    = f"./models/weight/new_merged_{model_type}-hf" # final merged weights
@@ -623,7 +623,7 @@ Let's talk about a couple of important ideas first:
 In practice, weights are almost never stored as individual scalars — they're stored as matrices (2D tensors), which is why you hear the term *weight matrix*.
 :::
 
-```py frame="code"
+```py frame="code" title="Configure DAPT recipe"
 import nemo_run as run
 from nemo.collections import llm
 from nemo.collections.llm import Llama2Config7B
@@ -667,7 +667,7 @@ Broadly, we can evaluate our models based on quantitative or qualitative evaluat
 - Task-specific benchmarks: to test the model on newly learned domain knowledge
 - Adversarial benchmarks: test robustness by presenting the model with tricky or misleading inputs.
 
-```py frame="code"
+```py frame="code" title="DAPT training configuration"
 import nemo.lightning as nl
 from nemo.collections.common.tokenizers import AutoTokenizer
 
@@ -735,7 +735,7 @@ recipe.data.paths = [1, '/dli/task/03_domain_adaptive_pretraining/preprocessed_d
 - SFT is also referred to as "instruction tuning" where we use SFT to teach a model to follow instructions better.
 - SFT requires a task-specific dataset (input-output pairs).
 
-```py frame="code"
+```py frame="code" title="Configure supervised fine-tuning"
 # with all above components created, call NeMo2.0 finetune API
 def configure_finetuning_recipe():
     return run.Partial(
@@ -798,8 +798,8 @@ So we learned a lot in this workshop. In order:
 
 1. We learned about **data curation**. Data curation is an important part of the DAPT pipeline as it helps us maximize LLM accuracy and reliability for specific tasks. We use techniques like **data deduplication**, **PII redaction**, etc.
 2. Next, we looked into **custom tokenization**. We trained a Domain Specific Tokenizer from scratch to identify domain-specific tokens that were missing from the original tokenizer. We balanced the tradeoff by identifying the most frequently occurring tokens and adding those to create the domain adapted tokenizer.
-3. Then, we got into the real meat of this workshop: DAPT. We took a pre-trained, foundational model (llama-2-7B) and further pre-trained it.
-4. Lastly, we used supervised fine-tuning (SFT), which involved the refining of the LLMs knowledge using enterprise data.
+3. Then, we got into the real meat of this workshop: **DAPT**. We took a pre-trained, foundational model (**llama-2-7B**) and further pre-trained it.
+4. Lastly, we used supervised fine-tuning (**SFT**), which involved the refining of the LLMs knowledge using enterprise data.
 
 
 The ChipNeMo paper that inspired this workshop showed measurable improvements on chip design tasks over the base Llama 2 model. This workshop is a hands-on reproduction of that methodology at a smaller scale. 
