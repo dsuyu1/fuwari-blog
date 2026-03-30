@@ -605,13 +605,21 @@ The main objective of Domain-Adaptive Pretraining (DAPT) is to further pre-train
 Let's talk about a couple of important ideas first:
 
 1. [Tensor and pipeline parallelism](https://insujang.github.io/2024-01-11/tensor-model-parallelism-and-sequence-parallelism-detailed-analysis/#tensor-model-parallelism): We split neural networks across GPUs for a reduced memory footprint. This technique allows large-scale training of LLMs across accelerated infrastructure.
-    - **Tensor parallelism** enables sharding of the model, allowing very large models to fit into GPU memory
-    - **Pipeline parallelism** reduces activation memory overhead, maximizing GPU utilization
+    - **Tensor parallelism** enables sharding of the model, allowing very large models to fit into GPU memory. It works by splitting individual weight matrices across GPUs.
+    - **Pipeline parallelism** reduces activation memory overhead, maximizing GPU utilization. It splits the model by _layers_. For example, GPU 0 runs layers 1-8, GPU 1 runs layers 9-16, etc. 
     - **Data parallelism** shards the input data into batches, with each batch of data trained on the entire model. [Source](https://expertofobsolescence.substack.com/p/demystifying-distributed-checkpointing)
 2. [Sequence parallelism](https://insujang.github.io/2024-01-11/tensor-parallelism-and-sequence-parallelism-detailed-analysis/#difference-in-sequence-token-and-batch): We work with tensor processing to increase the batch size that can support training.
 3. [Selective activation recomputation](https://docs.nvidia.com/nemo/megatron-bridge/0.2.0/training/activation-recomputation.html): Smart activation checkpointing allows us to only save essential data and recompute it as needed.
 4. **[Distributed checkpointing](https://expertofobsolescence.substack.com/p/demystifying-distributed-checkpointing)** is crucial and is another key feature when training LLMs across multiple GPUs or nodes.
     - Allows us to save, load, and restore even if the training parallelism strategy changes.
+
+:::important
+**Tensors** are the universal data containers. You can think of them as [generalizations of scalars and vectors](https://www.doitpoms.ac.uk/tlplib/tensors/what_is_tensor.php). 
+
+**Weights** are the learnable parameters of a neural network. A single weight is just a scalar that controls how much influence one neuron has on another. Training is the process of finding weights that minimize the loss function. Gradient descent computes how much each weight contributed to the error, then nudges each weight in the direction that reduces that error. Do this millions of times across millions of examples and the weights converge to something useful.
+
+In practice, weights are almost never stored as individual scalars — they're stored as matrices (2D tensors), which is why you hear the term *weight matrix*.
+:::
 
 ```py frame="code"
 import nemo_run as run
@@ -656,10 +664,6 @@ Broadly, we can evaluate our models based on quantitative or qualitative evaluat
 - General-purpose benchmarks: to ensure the model retains information from pretraining.
 - Task-specific benchmarks: to test the model on newly learned domain knowledge
 - Adversarial benchmarks: test robustness by presenting the model with tricky or misleading inputs.
-
-:::important
-We convert the data from `.jsonl` to bin/idx to enable efficient, high-throughput data loading and reduce I/O bottlenecks during training. 
-:::
 
 ```py frame="code"
 import nemo.lightning as nl
