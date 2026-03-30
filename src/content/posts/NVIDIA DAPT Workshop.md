@@ -12,6 +12,8 @@ draft: false
 
 My university gave me the privilege of accessing NVIDIA's catalog of hands-on workshops for free. In this blog post, I cover _Domain-Adaptive Pre-Training: Tailoring LLMs for Specialized Applications_. This workshop is closely aligned with **NVIDIA's NeMo Curator ecosystem**: the hands-on lab uses NeMo Curator to ingest, clean, deduplicate, and filter domain-specific data before applying **DAPT**.
 
+These notes are mostly for myself to look back on, and they also serve to document my journey into AI. :) If you decide to read this, I hope you enjoy!
+
 ![NVIDIA's DAPT process for NeMo Chip LLM](/data-processing-training-domain-specific-llms-1024x270.jpg)
 
 [Domain-Adaptive Pre-Training (DAPT)](https://marutitech.com/domain-adaptive-pretraining-llms/) is the process of further training pre-trained general LLMs on domain-specific data. For example, we might train an LLM on curated cybersecurity data to make it better at answering cyber-specific questions.
@@ -652,7 +654,7 @@ def local_executor_torchrun(devices: int = 1) -> run.LocalExecutor:
 Broadly, we can evaluate our models based on quantitative or qualitative evaluations.
 
 1. Quantitative:
-    - **Metrics**: perplexity, ROUGE, BLEU, cosine similarity, etc.
+    - **Metrics**: perplexity, [ROUGE](https://www.geeksforgeeks.org/nlp/understanding-bleu-and-rouge-score-for-nlp-evaluation/), [BLEU](https://www.geeksforgeeks.org/nlp/understanding-bleu-and-rouge-score-for-nlp-evaluation/), [cosine similarity](https://www.geeksforgeeks.org/dbms/cosine-similarity/), etc.
     - **Benchmark datasets**
     - **LLM-as-a-judge**: numerical scoring
     - **Adversarial**: failure rates, accuracy drops, etc.
@@ -772,7 +774,7 @@ When fine-tuning, here are some key points to know:
     - Higher risk of catastrophic forgetting
 - **Overfitting prevention**:
     - early stopping with cross-validation
-    - mixture-of-experts (MoE) architecture
+    - [mixture-of-experts (MoE) architecture](https://huggingface.co/blog/moe)
 
 For evaluation:
 - **Human-in-the-loop**: Reinforcement learning from human feedback (**RLHF**)
