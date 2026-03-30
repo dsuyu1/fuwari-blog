@@ -1,5 +1,6 @@
 ---
 title: "Domain-Adaptive Pre-Training: Tailoring LLMs for Specialized Applications"
+slug: "nvidia-dapt-workshop"
 published: 2026-3-28T00:00:00-08:00
 description: This blog post is a review of what I learned in NVIDIA's DAPT workshop, along with some notes and code review.
 tags: [NVIDIA, DAPT, AI, Python]
@@ -768,13 +769,17 @@ When fine-tuning, here are some key points to know:
 - Start from DAPT or instruction fine-tuned models
 - Use a **domain-adapted tokenizer**
 - Use data parallelism, tensor parallelism, and pipeline parallelism in your parallelism strategy
-- **Loss function**: prediction loss with optional regularization (e.g., KLD with a reference model)
+- **Loss function**: prediction loss with optional regularization (e.g., [Kullback-Leibler (KL) Divergence](https://encord.com/blog/kl-divergence-in-machine-learning/) with a reference model)
 - Learning rate: use a smaller LR than DAPT
     - Easier to overfit on smaller, high-quality, curated SFT data
     - Higher risk of catastrophic forgetting
 - **Overfitting prevention**:
     - early stopping with cross-validation
     - [mixture-of-experts (MoE) architecture](https://huggingface.co/blog/moe)
+
+:::note
+[Loss functions](https://www.ibm.com/think/topics/loss-function) are used to measure model performance by calculating the deviation of a model’s predictions from the correct predictions.
+:::
 
 For evaluation:
 - **Human-in-the-loop**: Reinforcement learning from human feedback (**RLHF**)
