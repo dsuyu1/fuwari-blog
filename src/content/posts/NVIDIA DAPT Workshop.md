@@ -22,16 +22,10 @@ If you're curious, here are the dependencies for the notebook:
 
 ```bash frame="code" title="Install dependencies"
 apt update
-apt-get install poppler-utils
-apt-get install tesseract-ocr
-apt install libtesseract-dev
-pip install -r requirements.txt
-pip uninstall --yes $(pip list --format=freeze | grep opencv)
-rm -rf /usr/local/lib/python3.10/dist-packages/cv2/
-pip install opencv-python-headless
-pip install -r requirements.txt
-python -c "import nltk; nltk.download('punkt_tab')"
-python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng')"
+pip install "numpy<2" --break-system-packages
+pip install datasets sentencepiece jsonlines tokenizers transformers torch ftfy matplotlib
+pip install protobuf==3.20.1
+pip install "huggingface_hub==0.24.6" --break-system-packages
 ```
 
 
@@ -358,11 +352,11 @@ def blend_and_shuffle(
 ```
 <div align="center">
 
-![Blender](/blender.jpg)
+![Blending/shuffling animation](/blending_shuffling.gif)
 
 <small>
 
-**Blending** controls the training mix rather than using raw source proportions. 
+**Blending** controls the training mix rather than using raw source proportions. Animation courtesy of Claude.
 
 </small>
 </div>
@@ -459,6 +453,8 @@ Finally, the Original Tokenizer is extended using only high-frequency tokens to 
 Only tokens with the highest usage frequency on the domain-specific data are added.
 :::
 
+![Token types](/tokenizer_vocab.gif)
+
 Without further ado, let's get into the steps!
 
 ## 2.1 Training a tokenizer from scratch
@@ -489,66 +485,6 @@ There are various hyperparameters that are important:
     - Specialized/technical domains and unique terminology require a larger vocabulary
     - This does not have to equal the number of new tokens that will be added
 The original tokenizer model is **Llama2**.
-
-```py frame="code"
-import nemo.lightning as nl
-from nemo.collections.common.tokenizers import AutoTokenizer
-
-# Define dataset configuration
-data = run.Config(
-    llm.PreTrainingDataModule,
-    paths=['/dli/task/03_domain_adaptive_pretraining/preprocessed_data_text_document'],
-    seq_length=4096,
-    tokenizer=run.Config(
-        AutoTokenizer,
-        pretrained_model_name="/dli/task/02_custom_tokenizer_training/models/weight/llama2-7b-hf",
-    ),
-    micro_batch_size=1,
-    global_batch_size=8,
-)
-
-# Instantiate the recipe
-recipe = configure_recipe(nodes=1, gpus_per_node=2)
-
-# Configure resume settings
-recipe.resume = run.Config(
-    nl.AutoResume,
-    restore_config=run.Config(nl.RestoreConfig, path="/root/.cache/nemo/models/llama2-7b-hf"),
-)
-
-# Ensure tokenizer is set
-recipe.data.tokenizer = data.tokenizer
-
-# Configure parallelism settings
-recipe.trainer.strategy.tensor_model_parallel_size = 2
-recipe.trainer.strategy.pipeline_model_parallel_size = 1
-recipe.trainer.strategy.context_parallel_size = 1
-
-# Configure training steps and validation intervals
-recipe.trainer.max_steps = 20
-recipe.trainer.max_epochs = 1
-recipe.trainer.val_check_interval = 10
-recipe.trainer.limit_val_batches=5
-
-# Set batch size settings
-recipe.data.global_batch_size = data.global_batch_size
-recipe.data.micro_batch_size = data.micro_batch_size
-recipe.data.num_val_samples = 128  # Adjust based on dataset size
-
-# Set checkpoint and log locations
-recipe.log.log_dir = "/workspace/logs_03_15"
-recipe.log.ckpt.save_optim_on_train_end = True
-
-# Configure learning rate scheduler
-recipe.optim.config.lr = 1e-5
-recipe.optim.lr_scheduler.min_lr = 1e-6
-
-# Assign dataset configuration
-recipe.data = data
-
-# Configure data blending (if needed)
-recipe.data.paths = [1, '/dli/task/03_domain_adaptive_pretraining/preprocessed_data_text_document']
-```
 
 ## 2.2 Identify new domain tokens
 From the vocabulary of the newly trained tokenizer, identify tokens that are absent in the general-purpose tokenizer and are rarely found in general-purpose datasets.
@@ -725,10 +661,70 @@ Broadly, we can evaluate our models based on quantitative or qualitative evaluat
 We convert the data from `.jsonl` to bin/idx to enable efficient, high-throughput data loading and reduce I/O bottlenecks during training. 
 :::
 
+```py frame="code"
+import nemo.lightning as nl
+from nemo.collections.common.tokenizers import AutoTokenizer
+
+# Define dataset configuration
+data = run.Config(
+    llm.PreTrainingDataModule,
+    paths=['/dli/task/03_domain_adaptive_pretraining/preprocessed_data_text_document'],
+    seq_length=4096,
+    tokenizer=run.Config(
+        AutoTokenizer,
+        pretrained_model_name="/dli/task/02_custom_tokenizer_training/models/weight/llama2-7b-hf",
+    ),
+    micro_batch_size=1,
+    global_batch_size=8,
+)
+
+# Instantiate the recipe
+recipe = configure_recipe(nodes=1, gpus_per_node=2)
+
+# Configure resume settings
+recipe.resume = run.Config(
+    nl.AutoResume,
+    restore_config=run.Config(nl.RestoreConfig, path="/root/.cache/nemo/models/llama2-7b-hf"),
+)
+
+# Ensure tokenizer is set
+recipe.data.tokenizer = data.tokenizer
+
+# Configure parallelism settings
+recipe.trainer.strategy.tensor_model_parallel_size = 2
+recipe.trainer.strategy.pipeline_model_parallel_size = 1
+recipe.trainer.strategy.context_parallel_size = 1
+
+# Configure training steps and validation intervals
+recipe.trainer.max_steps = 20
+recipe.trainer.max_epochs = 1
+recipe.trainer.val_check_interval = 10
+recipe.trainer.limit_val_batches=5
+
+# Set batch size settings
+recipe.data.global_batch_size = data.global_batch_size
+recipe.data.micro_batch_size = data.micro_batch_size
+recipe.data.num_val_samples = 128  # Adjust based on dataset size
+
+# Set checkpoint and log locations
+recipe.log.log_dir = "/workspace/logs_03_15"
+recipe.log.ckpt.save_optim_on_train_end = True
+
+# Configure learning rate scheduler
+recipe.optim.config.lr = 1e-5
+recipe.optim.lr_scheduler.min_lr = 1e-6
+
+# Assign dataset configuration
+recipe.data = data
+
+# Configure data blending (if needed)
+recipe.data.paths = [1, '/dli/task/03_domain_adaptive_pretraining/preprocessed_data_text_document']
+```
+
 # 4. Supervised Fine-Tuning (SFT)
 ![Model customization for enterprise ready LLMs](/Lifecycle-generative-AI-application.png)
 
-Supervised fine-tuning (SFT) enables a pre-trained model to specialize in a given domain by training it on labeled data, refining its responses while preserving the broad knowledge acquired during pretraining.
+[**Supervised fine-tuning (SFT)** ](https://docs.nvidia.com/nemo-framework/user-guide/25.04/automodel/sft.html) enables a pre-trained model to specialize in a given domain by training it on labeled data, refining its responses while preserving the broad knowledge acquired during pretraining.
 - SFT updates a larger portion (or even all) of the model weights.
 - SFT is also referred to as "instruction tuning" where we use SFT to teach a model to follow instructions better.
 - SFT requires a task-specific dataset (input-output pairs).
@@ -764,23 +760,23 @@ run.run(configure_finetuning_recipe(), executor=local_executor_torchrun())
 ## Key Technical Learnings
 When fine-tuning, here are some key points to know:
 - Start from DAPT or instruction fine-tuned models
-- Use a domain-adapted tokenizer
+- Use a **domain-adapted tokenizer**
 - Use data parallelism, tensor parallelism, and pipeline parallelism in your parallelism strategy
-- Loss function: prediction loss with optional regularization (e.g., KLD with a reference model)
+- **Loss function**: prediction loss with optional regularization (e.g., KLD with a reference model)
 - Learning rate: use a smaller LR than DAPT
     - Easier to overfit on smaller, high-quality, curated SFT data
     - Higher risk of catastrophic forgetting
-- Overfitting prevention:
+- **Overfitting prevention**:
     - early stopping with cross-validation
     - mixture-of-experts (MoE) architecture
 
 For evaluation:
-- Human-in-the-loop: RLHF
+- **Human-in-the-loop**: Reinforcement learning from human feedback (**RLHF**)
     - Pros: accurate feedback from domain experts
     - Cons:
         - slow to collect feedback
         - subjective bias
-- LLM as a judge
+- **LLM as a judge**
     - Pros: quick
     - Cons:
         - biased by its training data
