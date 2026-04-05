@@ -187,7 +187,7 @@ The following findings were generated from Claude's audit report.
 
 ---
 
-# Step 1: Weak/insecure Passwords, `start-dev` Issue
+# Issue 1: Weak/insecure Passwords, `start-dev` Issue
 
 ![Fixing the start-dev issue](/p0-1.png)
 
@@ -375,11 +375,11 @@ Checklist:
 - [ ] Add Wazuh dashboard OIDC logout URL
 - [ ] Cassandra heap inversion in testing (will crash)
 - [ ] Cortex: set `play.http.session.secure` = true in prod, narrow trusted proxies
-- [ ] Cortex: set play.http.session.secure = true in prod, narrow trusted proxies
+- [ ] Cortex: set `play.http.session.secure` = true in prod, narrow trusted proxies
 - [ ] Fix testing .env duplicate UID/GID placeholders
 - [ ] Verify prod .env files exist before starting prod stacks
 
-## Step 2: Add KC_HOSTNAME=auth.vaqueroisi.org to fix OIDC issuer mismatch
+## Issue 2: No `KC_HOSTNAME` set
 We could have done this in the previous step as well, but oh well - let's do it now.
 
 ![Adding KC_HOSTNAME](/p1-1.png)
@@ -399,6 +399,23 @@ Checklist:
 - [ ] Fix testing .env duplicate UID/GID placeholders
 - [ ] Verify prod .env files exist before starting prod stacks
 
-## Step 3: 
+## Issue 3: Wazuh OIDC missing logout URL
 
 ![Wazuh dashboard OIDC Fix](/wazuh_logout_fix.png)
+
+Again, this line sets up OpenID Connect (OIDC) logout behavior. It redirects to `https://wazuh.vaqueroisi.org`
+
+Checklist:
+
+- [x] Keycloak start-dev → switch to start + set KC_HOSTNAME
+- [x] Default Wazuh SecretPassword / kibanaserver credentials
+- [x] Rotate Keycloak/Postgres passwords, stop reusing them
+- [x] Add KC_HOSTNAME=auth.vaqueroisi.org to fix OIDC issuer mismatch
+- [x] Add Wazuh dashboard OIDC logout URL
+- [ ] Cassandra heap inversion in testing (will crash)
+- [ ] Cortex: set `play.http.session.secure` = true in prod, narrow trusted proxies
+- [ ] Cortex: set play.http.session.secure = true in prod, narrow trusted proxies
+- [ ] Fix testing .env duplicate UID/GID placeholders
+- [ ] Verify prod .env files exist before starting prod stacks
+
+## Issue 4: Cassandra heap misconfiguration in testing
