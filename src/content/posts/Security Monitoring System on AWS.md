@@ -2,8 +2,9 @@
 title: "Part I & II: Building a Security Monitoring System on AWS"
 published: 2026-4-3T00:00:00-08:00
 tags: [AWS, Cloud Security]
-description: "A "
+description: "Follow along as I build a robust security monitoring system using AWS."
 category: Cybersecurity
+image: /aws_security.jpg
 draft: true
 ---
 
