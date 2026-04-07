@@ -5,7 +5,7 @@ published: 2026-3-28T00:00:00-08:00
 description: This blog post is a review of what I learned in NVIDIA's DAPT workshop, along with some notes and code review.
 tags: [NVIDIA, DAPT, AI, Python]
 category: Artificial Intelligence
-image: https://cdn.marutitech.com/Artboard_2_copy_2x_2b6b1eae5f.png
+image: /mariia-shalabaieva-0SqsTxWhgNU-unsplash.jpg
 draft: false
 ---
 
