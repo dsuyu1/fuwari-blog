@@ -14,7 +14,7 @@ I've been having problems with my SOC lab recently, so I put Claude Code on the 
 
 Here was the prompt:
 
-> Hello Claude! You're going to help me audit and fix my SOC lab environment. I have a few folders related to my docker containers that host it, along with some other components. Users are having trouble logging in, and I think the majority of my issues are related to Keycloak, as its all inability to log in via SSO and other authentication related issues. Anyways, thats for another time. Audit my environment, and let me know where I can fix things.
+> Hello Claude! You're going to help me audit and fix my SOC lab environment. I have a few folders related to my Docker containers that host it, along with some other components. Users are having trouble logging in, and I think most of the issues are related to Keycloak — it's causing failures to log in via SSO and other authentication-related problems. Anyway, that's for another time. Audit my environment and let me know where I can fix things.
 
 # Audit Report
 
@@ -98,7 +98,7 @@ The following findings were generated from Claude's audit report.
 
    - **File**: `prod1-cortex/cortex/config/application.conf:14` and `prod2-cortex/...`
 
-   ```hocon frame="code" title="Overly permissive proxy trust"
+   ```frame="code" title="Overly permissive proxy trust"
    play.http.forwarded.trustedProxies=["0.0.0.0/0", "::/0"]
    ```
 
@@ -108,7 +108,7 @@ The following findings were generated from Claude's audit report.
 
    - **Files**: both prod cortex `application.conf`
 
-   ```hocon frame="code" title="Insecure cookie settings"
+   ```frame="code" title="Insecure cookie settings"
    play.http.session.secure = false
    play.filters.csrf.cookie.secure = false
    ```
@@ -188,6 +188,8 @@ The following findings were generated from Claude's audit report.
 ---
 
 # Issue 1: Weak/insecure Passwords, `start-dev` Issue
+We're going to tackle each issue in order of descending priority.
+
 
 ![Fixing the start-dev issue](/p0-1.png)
 
@@ -374,8 +376,7 @@ Checklist:
 - [ ] Add KC_HOSTNAME=auth.vaqueroisi.org to fix OIDC issuer mismatch
 - [ ] Add Wazuh dashboard OIDC logout URL
 - [ ] Cassandra heap inversion in testing (will crash)
-- [ ] Cortex: set `play.http.session.secure` = true in prod, narrow trusted proxies
-- [ ] Cortex: set `play.http.session.secure` = true in prod, narrow trusted proxies
+- [ ] Cortex: set `play.http.session.secure` and `play.filters.csrf.cookie.secure` = true in prod, narrow trusted proxies
 - [ ] Fix testing .env duplicate UID/GID placeholders
 - [ ] Verify prod .env files exist before starting prod stacks
 
@@ -394,8 +395,7 @@ Checklist:
 - [x] Add KC_HOSTNAME=auth.vaqueroisi.org to fix OIDC issuer mismatch
 - [ ] Add Wazuh dashboard OIDC logout URL
 - [ ] Cassandra heap inversion in testing (will crash)
-- [ ] Cortex: set `play.http.session.secure` = true in prod, narrow trusted proxies
-- [ ] Cortex: set play.http.session.secure = true in prod, narrow trusted proxies
+- [ ] Cortex: set `play.http.session.secure` and `play.filters.csrf.cookie.secure` = `true` in prod, narrow trusted proxies
 - [ ] Fix testing .env duplicate UID/GID placeholders
 - [ ] Verify prod .env files exist before starting prod stacks
 
@@ -413,10 +413,88 @@ Checklist:
 - [x] Add KC_HOSTNAME=auth.vaqueroisi.org to fix OIDC issuer mismatch
 - [x] Add Wazuh dashboard OIDC logout URL
 - [ ] Cassandra heap inversion in testing (will crash)
-- [ ] Cortex: set `play.http.session.secure` = true in prod, narrow trusted proxies
-- [ ] Cortex: set play.http.session.secure = true in prod, narrow trusted proxies
+- [ ] Cortex: set `play.http.session.secure` and `play.filters.csrf.cookie.secure` = `true` in prod, narrow trusted proxies
 - [ ] Fix testing .env duplicate UID/GID placeholders
 - [ ] Verify prod .env files exist before starting prod stacks
 
 ## Issue 4: Cassandra heap misconfiguration in testing
 
+![Fixing the Cassandra heap size](/cassandra.png)
+
+**Cassandra** heap size is the amount of JVM memory allocated to the database (`MAX_HEAP_SIZE`) for operations like managing memtables and reading data. According to [accepted guidelines and recommendations](https://docs.datastax.com/en/dse/6.9/managing/operations/change-heap-size.html), heap size is usually 1/4 and 1/2 of system memory, but no larger than 32 GB.
+
+Checklist:
+
+- [x] Keycloak start-dev → switch to start + set KC_HOSTNAME
+- [x] Default Wazuh SecretPassword / kibanaserver credentials
+- [x] Rotate Keycloak/Postgres passwords, stop reusing them
+- [x] Add KC_HOSTNAME=auth.vaqueroisi.org to fix OIDC issuer mismatch
+- [x] Add Wazuh dashboard OIDC logout URL
+- [x] Cassandra heap inversion in testing (will crash)
+- [ ] Cortex: set `play.http.session.secure` and `play.filters.csrf.cookie.secure` = `true` in prod, narrow trusted proxies
+- [ ] Fix testing .env duplicate UID/GID placeholders
+- [ ] Verify prod .env files exist before starting prod stacks
+
+## Issue 5: Cortex proxy settings
+**[Cortex](https://strangebee.com/cortex/)** is the "brain" of TheHive. It's open-source, and it solves two common problems frequently encountered by SOCs, CSIRTs and security researchers in the course of threat intelligence, digital forensics and incident response:
+- How to analyze observables they have collected, at scale, by querying a single tool instead of several?
+- How to actively respond to threats and interact with the constituency and other teams?
+
+Let's set the scope of the proxy to trust our `nginx` container's subnet. We can find this using `docker ps`.
+
+![nginx and cortex proxy](/nginx.png)
+
+We can see that our containers are listening locally. Let's set the proxy to accept connects from our local subnet.
+
+![Cortex fix](/cortex_fix.png)
+
+We need to do this for both `prod1-cortex` and `prod2-cortex`.
+
+We also need to fix our CSRF cookie settings. In the same file, I'll set `play.http.session.secure` and `play.filters.csrf.cookie.secure` to `true`.
+
+[Cross-site request forgery (CSRF)](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/CSRF) cookies are security mechanisms used to prevent unauthorized commands from being executed on a web application where a user is authenticated. The way it works is that the cookie stores a unique, secret token that the server verifies against a corresponding token in HTTP requests (like POST) to ensure that the request is legitimate and wasn't forged by a malicious site.
+
+Checklist:
+
+- [x] Keycloak start-dev → switch to start + set KC_HOSTNAME
+- [x] Default Wazuh SecretPassword / kibanaserver credentials
+- [x] Rotate Keycloak/Postgres passwords, stop reusing them
+- [x] Add KC_HOSTNAME=auth.vaqueroisi.org to fix OIDC issuer mismatch
+- [x] Add Wazuh dashboard OIDC logout URL
+- [x] Cassandra heap inversion in testing (will crash)
+- [x] Cortex: set `play.http.session.secure` and `play.filters.csrf.cookie.secure` = `true` in prod, narrow trusted proxies
+- [ ] Fix testing .env duplicate UID/GID placeholders
+- [ ] Verify prod .env files exist before starting prod stacks
+
+## Issue 6: Wazuh internal_users.yml uses demo account hashes
+`bcrypt` hashes are used to compare if your password produces a match. If it does, you're authenticated! If an attacker was able to steal our `internal_users.yml` file, they wouldn't get any passwords - just `bcrypt` hashes.
+
+The best way to regenerate the hashes is to use Wazuh's built-in tools
+
+![Rotating Wazh's default hashes](/rotating_wazuh_hashes.png)
+
+1. Find the indexer's container name. The script `plugin/tools/hash.sh` lives _inside_ the container, so we'll need to `docker exec` into it.
+2. Run the follow command:
+```bash
+# command to remote into a Docker  container
+docker exec -it <your_indexer_container_name> env OPENSEARCH_JAVA_HOME=/usr/share/wazuh-indexer/jdk /usr/share/wazuh-indexer/plugins/opensearch-security/tools/hash.sh -p 'YourStrongPasswordHere'
+```
+3. You should see a hash outputted in the terminal. Repeat for all users (`admin`, `kibanaserver`, `kibanaro`, etc.)
+
+## Issue 7 & Configuration Bugs
+![default_system_variables](/default_system_variables.png)
+
+Let's delete these placeholders. 
+
+Now that we've gone and verified the most critical issues have been remediated, I'll use Claude to clean up the small configuration issues and inconsistencies.
+
+![Prompt and output](/claude_configuration_help.png)
+
+![Final output](/claude_code_output.png)
+
+![Empty SSL certificate issues](/empty_ssl_certificate.png)
+
+# Conclusion
+It goes without saying, but AI is an amazing accelerator for engineering and architecting. Claude's audit moved the VISI SOC lab from poorly-made to much more resilient. We closed the most critical authentication and configuration gaps and restored reliable SSO behavior. We can use AI to accelerate discovery and suggest fixes, but always validate changes with testing, and—when possible—a targeted _penetration test_ before declaring systems production-ready.
+
+Speaking of penetration testing—that's the next step! In the next post, I'll be demonstrating how to conduct a rudimentary penetration test against my own environment!
