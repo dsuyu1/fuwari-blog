@@ -419,3 +419,4 @@ Checklist:
 - [ ] Verify prod .env files exist before starting prod stacks
 
 ## Issue 4: Cassandra heap misconfiguration in testing
+
