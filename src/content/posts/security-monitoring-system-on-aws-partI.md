@@ -9,7 +9,7 @@ draft: false
 ---
 
 # Introduction
-Welcome to Part I of the AWS Security Monitoring System project! This project demonstrates building a comprehensive security monitoring system on AWS through a progressive, hands-on approach.
+Welcome to **Part I** of the AWS Security Monitoring System project! The goal of this project is to demonstrate how to build a comprehensive security monitoring system on AWS through a progressive, hands-on approach.
 
 **Part I** establishes the foundational monitoring stack using **AWS CloudTrail**, **CloudWatch**, and **SNS** via the AWS Management Console and CLI. This manual setup is guided by [NextWork's walkthrough](https://learn.nextwork.org/projects/aws-security-monitoring?track=high). It's designed to provide an introduction into how these services integrate to detect and alert on unauthorized secret access.
 
