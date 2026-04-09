@@ -1,15 +1,15 @@
 ---
-title: "Part I & II: Building a Security Monitoring System on AWS"
+title: "Part I: Foundations of a Security Monitoring System in AWS"
 published: 2026-4-3T00:00:00-08:00
 tags: [AWS, Cloud Security]
 description: "Follow along as I build a robust security monitoring system using AWS."
 category: Cybersecurity
 image: /aws_security.jpg
-draft: true
+draft: false
 ---
 
 # Introduction
-Welcome to Part I & II of the AWS Security Monitoring System project! This project demonstrates building a comprehensive security monitoring system on AWS through a progressive, hands-on approach.
+Welcome to Part I of the AWS Security Monitoring System project! This project demonstrates building a comprehensive security monitoring system on AWS through a progressive, hands-on approach.
 
 **Part I** establishes the foundational monitoring stack using **AWS CloudTrail**, **CloudWatch**, and **SNS** via the AWS Management Console and CLI. This manual setup is guided by [NextWork's walkthrough](https://learn.nextwork.org/projects/aws-security-monitoring?track=high). It's designed to provide an introduction into how these services integrate to detect and alert on unauthorized secret access.
 
@@ -21,7 +21,7 @@ Additionally, I want to add some features like Jira integrations that you might 
 
 ![Part II Architecture diagram](/partII_architecture.png)
 
-**Part III** wil deal with more extensions, best practice, security testing, and compliance. I'll walk through each of the AWS CIS benchmarks, hardening our system and getting it prepared production. I'll also clean up the diagram, as Part II was more of a sandbox/education experience, and Part III will serve as the final touches - the cherry on top.
+**Part III** wil deal with more extensions, best practice, security testing, more Terraform, and compliance. I'll walk through each of the AWS CIS benchmarks, hardening our system and getting it prepared production. I'll also clean up the diagram, as Part II was more of a sandbox/education experience, and Part III will serve as the final touches - the cherry on top.
 
 I hope you enjoy this project as much as I did creating it! Feel free to use these resources for your own learning. Happy building!
 
@@ -210,18 +210,3 @@ In Part II, I'll build upon this foundation and start getting _real_ creative wi
 <div align="center">
     <small> Finished product. </small>
 </div>
-
-# Part II: Extensions
-Part II is where things start to get a bit more interesting. Here are some things I'm looking to implement:
-
-1. Log sources (EC2 + Lambda)
-2. Jira + Slack integration
-3. Some sort of automatic incident response (IR) (e.g., isolating a potentially compromised IAM user). 
-4. Building on the last point, a dashboard to manage IR actions (Security Hub).
-5. and more!
-
-The architecture diagram:
-
-![Part II Architecture diagram](/partII_architecture.png)
-
-Let's start with spinning up some log sources. I'll make an EC2 honeypot with T-Pot, and a Lambda function that simulates an API.
