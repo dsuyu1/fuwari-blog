@@ -1,7 +1,7 @@
 ---
 title: "Claude Audited My SOC Lab — It Was Not Happy"
 published: 2026-4-5T00:00:00-08:00
-tags: [Docker, Keycloak, VISI]
+tags: [AI, Docker, Keycloak, VISI]
 description: "I asked Claude to audit the VISI SOC lab environment, and it found some questionable things."
 category: Cybersecurity
 draft: true
